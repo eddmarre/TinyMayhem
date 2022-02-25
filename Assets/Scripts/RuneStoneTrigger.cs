@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TestableScripts;
+using PlayerController;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.UI;
 
 public class RuneStoneTrigger : MonoBehaviour
 {
@@ -32,20 +27,12 @@ public class RuneStoneTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-
-        if (other.GetComponent<Player>())
+        if (other.TryGetComponent(out Player player))
         {
             _textMeshPro.gameObject.SetActive(true);
             AudioSource.PlayClipAtPoint(textAppearanceSound, transform.position);
-            other.GetComponent<Player>().OnButtonPressed += ActivateRune;
+            player.OnButtonPressed += ActivateRune;
         }
-        // if (other.TryGetComponent(out Player player))
-        // {
-        //     _textMeshPro.gameObject.SetActive(true);
-        //     AudioSource.PlayClipAtPoint(textAppearanceSound, transform.position);
-        //     player.OnButtonPressed += ActivateRune;
-        // }
     }
 
     private void OnTriggerExit(Collider other)
@@ -78,7 +65,6 @@ public class RuneStoneTrigger : MonoBehaviour
 
     private void ActivateRune()
     {
-        Debug.Log("shrine activated", this);
         objective.AddActivatedShrine();
         Destroy(parentGo);
         var position = transform.position;

@@ -773,7 +773,7 @@ BlendTree:
   m_Name: Idle
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: e90fb7829e1df964a940ca135a44e094, type: 3}
+    m_Motion: {fileID: 7400000, guid: 10fdf7d751a2aef4bbb1b02c5b1e3f8d, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1285,7 +1285,7 @@ BlendTree:
   m_Name: Idle
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: e90fb7829e1df964a940ca135a44e094, type: 3}
+    m_Motion: {fileID: 7400000, guid: 14d7a32f6631f6049bd616bbdf7aa89a, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -13440,7 +13440,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 0}
+  m_Motion: {fileID: 7400000, guid: 0cbe56e545652b049bc7723fc5ebd85d, type: 3}
   m_Tag: Idle
   m_SpeedParameter: 
   m_MirrorParameter: 

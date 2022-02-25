@@ -10,6 +10,7 @@ using Random = System.Random;
 public class RuneRandomSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] runeGo;
+    [SerializeField] private int numberOfRunesToSpawn = 9;
 
     private readonly List<RuneSpawn> _runeSpawns = new List<RuneSpawn>();
     private readonly Random _randomSpawner = new Random();
@@ -23,13 +24,13 @@ public class RuneRandomSpawner : MonoBehaviour
             _runeSpawns.Add(runeSpawn);
         }
 
-        for (var ctr = 0; ctr < 10; ++ctr)
+        for (var ctr = 0; ctr < numberOfRunesToSpawn; ++ctr)
         {
             var spawnIndex = _randomSpawner.Next(_runeSpawns.Count);
             var runeIndex = _randomRune.Next(runeGo.Length);
 
             var parentTransform = _runeSpawns[spawnIndex].transform;
-            var rune = Instantiate(runeGo[runeIndex], parentTransform.position, quaternion.identity);
+            var rune = Instantiate(runeGo[runeIndex], parentTransform.position, parentTransform.rotation);
 
             rune.transform.SetParent(parentTransform);
             _runeSpawns.Remove(_runeSpawns[spawnIndex]);
@@ -39,25 +40,5 @@ public class RuneRandomSpawner : MonoBehaviour
         {
             vRuneSpawn.gameObject.SetActive(false);
         }
-    }
-
-    private void Start()
-    {
-        // for (var ctr = 0; ctr < 10; ++ctr)
-        // {
-        //     var spawnIndex = _randomSpawner.Next(_runeSpawns.Count);
-        //     var runeIndex = _randomRune.Next(runeGo.Length);
-        //
-        //     var parentTransform = _runeSpawns[spawnIndex].transform;
-        //     var rune = Instantiate(runeGo[runeIndex], parentTransform.position, quaternion.identity);
-        //
-        //     rune.transform.SetParent(parentTransform);
-        //     _runeSpawns.Remove(_runeSpawns[spawnIndex]);
-        // }
-        //
-        // foreach (var vRuneSpawn in _runeSpawns)
-        // {
-        //     vRuneSpawn.gameObject.SetActive(false);
-        // }
     }
 }

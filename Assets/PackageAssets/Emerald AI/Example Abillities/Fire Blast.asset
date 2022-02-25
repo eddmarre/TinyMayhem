@@ -40,7 +40,7 @@ MonoBehaviour:
   SummonEffectTimeoutSeconds: 3
   CollisionTimeout: 1
   DamageOvertimeTimeout: 3
-  GravityAmount: 1
+  GravityAmount: 0.1
   AbilityIcon: {fileID: 0}
   AbilityEffect: {fileID: 1303674608091680, guid: fc5ff3648c11ad14eaf5cee55439bcb6,
     type: 3}

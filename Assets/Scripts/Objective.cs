@@ -12,10 +12,7 @@ public class Objective : ScriptableObject
     private void OnEnable()
     {
         _numberOfShrinesActivated = 0;
-        // var shrines = FindObjectsOfType<RuneStoneTrigger>();
-        // _numberOfShrines = shrines.Length;
     }
-    
 
     public int AddActivatedShrine()
     {
