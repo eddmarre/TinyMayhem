@@ -10,33 +10,39 @@ namespace EmeraldAI
 {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(AudioSource))]  
+    [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(EmeraldAIDetection))]
     [RequireComponent(typeof(EmeraldAIInitializer))]
     [RequireComponent(typeof(EmeraldAIBehaviors))]
     [RequireComponent(typeof(EmeraldAIEventsManager))]
     [RequireComponent(typeof(EmeraldAILookAtController))]
     [SelectionBase]
-
     public class EmeraldAISystem : MonoBehaviour
     {
         #region Variables
+
         //3.0 Variables
         public bool NotifiedOfNewVersion = false;
         float TimeSinceStart;
         public bool ReachedDestination;
         float DelayTimer;
         Coroutine SwitchWeaponCoroutine;
-        public enum SwitchWeaponTypes { Distance, Timed};
+
+        public enum SwitchWeaponTypes
+        {
+            Distance,
+            Timed
+        };
+
         public SwitchWeaponTypes SwitchWeaponType = SwitchWeaponTypes.Timed;
         public int SwitchWeaponTimeMin = 10;
         public int SwitchWeaponTimeMax = 20;
         public float SwitchWeaponTime = 0;
-        public float SwitchWeaponTimer = 0;        
+        public float SwitchWeaponTimer = 0;
         public EmeraldAIHandIK EmeraldHandIKComp;
-        public GameObject HeldMeleeWeaponObject; 
+        public GameObject HeldMeleeWeaponObject;
         public GameObject HeldRangedWeaponObject;
-        public GameObject HolsteredMeleeWeaponObject;       
+        public GameObject HolsteredMeleeWeaponObject;
         public GameObject HolsteredRangedWeaponObject;
         public bool TurnDirectionMet;
         public float TurnSpeedTimer;
@@ -50,14 +56,28 @@ namespace EmeraldAI
 
         //Melee Attacks
         public int MeleeAttackIndex = 0;
-        public enum MeleeAttackPickTypeEnum { Odds, Order, Random };
+
+        public enum MeleeAttackPickTypeEnum
+        {
+            Odds,
+            Order,
+            Random
+        };
+
         public MeleeAttackPickTypeEnum MeleeAttackPickType = MeleeAttackPickTypeEnum.Order;
         public List<MeleeAttackClass> MeleeAttacks = new List<MeleeAttackClass>();
         public int MeleeAttacksListIndex = 0;
 
         //Melee Run Attacks
         public int MeleeRunAttackIndex = 0;
-        public enum MeleeRunAttackPickTypeEnum { Odds, Order, Random };
+
+        public enum MeleeRunAttackPickTypeEnum
+        {
+            Odds,
+            Order,
+            Random
+        };
+
         public MeleeRunAttackPickTypeEnum MeleeRunAttackPickType = MeleeRunAttackPickTypeEnum.Order;
         public List<MeleeAttackClass> MeleeRunAttacks = new List<MeleeAttackClass>();
         public int MeleeRunAttacksListIndex = 0;
@@ -74,7 +94,14 @@ namespace EmeraldAI
 
         //Offensive Abilities
         public int OffensiveAbilityIndex = 0;
-        public enum OffensiveAbilityPickTypeEnum { Odds, Order, Random };
+
+        public enum OffensiveAbilityPickTypeEnum
+        {
+            Odds,
+            Order,
+            Random
+        };
+
         public OffensiveAbilityPickTypeEnum OffensiveAbilityPickType = OffensiveAbilityPickTypeEnum.Order;
         public List<OffensiveAbilitiesClass> OffensiveAbilities = new List<OffensiveAbilitiesClass>();
 
@@ -88,7 +115,14 @@ namespace EmeraldAI
 
         //Support Abilities
         public int SupportAbilityIndex = 0;
-        public enum SupportAbilityPickTypeEnum { Odds, Order, Random };
+
+        public enum SupportAbilityPickTypeEnum
+        {
+            Odds,
+            Order,
+            Random
+        };
+
         public SupportAbilityPickTypeEnum SupportAbilityPickType = SupportAbilityPickTypeEnum.Order;
         public List<SupportAbilitiesClass> SupportAbilities = new List<SupportAbilitiesClass>();
 
@@ -102,7 +136,14 @@ namespace EmeraldAI
 
         //Summoning Abilities
         public int SummoningAbilityIndex = 0;
-        public enum SummoningAbilityPickTypeEnum { Odds, Order, Random };
+
+        public enum SummoningAbilityPickTypeEnum
+        {
+            Odds,
+            Order,
+            Random
+        };
+
         public SummoningAbilityPickTypeEnum SummoningAbilityPickType = SummoningAbilityPickTypeEnum.Order;
         public List<SummoningAbilitiesClass> SummoningAbilities = new List<SummoningAbilitiesClass>();
 
@@ -122,7 +163,7 @@ namespace EmeraldAI
         public int CurrentAnimationIndex = 0;
         public int CurrentRunAttackAnimationIndex = 0;
         public List<string> ActiveEffects = new List<string>();
-        public EmeraldAIProjectile CurrentlyCreatedAbility;        
+        public EmeraldAIProjectile CurrentlyCreatedAbility;
         public int MaxAllowedSummonedAI = 1;
         public int TotalSummonedAI = 0;
         public EmeraldAISystem CurrentSummoner;
@@ -143,7 +184,7 @@ namespace EmeraldAI
         public int SwitchWeaponTypesDistance = 8;
         public string CameraTag = "MainCamera";
         public EmeraldAIHealthBar m_HealthBarComponent;
-        
+
         public float AttackHeight = 5;
         public EmeraldAIAbility m_EmeraldAIAbility;
         public bool RotateTowardsTarget = false;
@@ -189,7 +230,14 @@ namespace EmeraldAI
 
         public int CurrentAggroHits = 0;
         public int TotalAggroHits = 5;
-        public enum AggroAction {LastAttacker = 0, RandomAttacker, ClosestAttacker};
+
+        public enum AggroAction
+        {
+            LastAttacker = 0,
+            RandomAttacker,
+            ClosestAttacker
+        };
+
         public AggroAction AggroActionRef = AggroAction.LastAttacker;
         public bool ReturnToStationaryPosition;
 
@@ -226,9 +274,9 @@ namespace EmeraldAI
         public bool IsAttacking;
         public bool IsGettingHit;
         public bool IsEquipping;
-        public bool IsBlocking; 
+        public bool IsBlocking;
         public bool IsBackingUp;
-        public bool IsTurning; 
+        public bool IsTurning;
         public bool IsTurningLeft, IsTurningRight;
         public bool IsSwitchingWeapons;
         public bool IsMoving;
@@ -359,45 +407,63 @@ namespace EmeraldAI
         public int RandomDirection;
         public bool TargetInView = false;
 
-        [SerializeField]
-        public int CurrentFaction;
-        [SerializeField]
-        public static List<string> StringFactionList = new List<string>();
-        public enum RelationType { Enemy = 0, Neutral = 1, Friendly = 2 };
+        [SerializeField] public int CurrentFaction;
+        [SerializeField] public static List<string> StringFactionList = new List<string>();
+
+        public enum RelationType
+        {
+            Enemy = 0,
+            Neutral = 1,
+            Friendly = 2
+        };
+
         public RelationType RelationTypeRef;
         public List<int> FactionRelations = new List<int>();
 
-        [SerializeField]
-        public List<FactionsList> FactionRelationsList = new List<FactionsList>();
+        [SerializeField] public List<FactionsList> FactionRelationsList = new List<FactionsList>();
 
         [System.Serializable]
         public class FactionsList
         {
             public int FactionIndex;
-            public enum RelationType { Enemy = 0, Neutral = 1, Friendly = 2 };
+
+            public enum RelationType
+            {
+                Enemy = 0,
+                Neutral = 1,
+                Friendly = 2
+            };
+
             public RelationType RelationTypeRef;
 
             public FactionsList(int m_FactionIndex, int m_RelationTypeRef)
             {
                 FactionIndex = m_FactionIndex;
-                RelationTypeRef = (RelationType)m_RelationTypeRef;
+                RelationTypeRef = (RelationType) m_RelationTypeRef;
             }
         }
 
-        [SerializeField]
-        public List<PlayerFactionClass> PlayerFaction = new List<PlayerFactionClass> { new PlayerFactionClass("Player", 0) };
+        [SerializeField] public List<PlayerFactionClass> PlayerFaction = new List<PlayerFactionClass>
+            {new PlayerFactionClass("Player", 0)};
 
         [System.Serializable]
         public class PlayerFactionClass
         {
             public string PlayerTag = "Player";
-            public enum RelationType { Enemy = 0, Neutral = 1, Friendly = 2 };
+
+            public enum RelationType
+            {
+                Enemy = 0,
+                Neutral = 1,
+                Friendly = 2
+            };
+
             public RelationType RelationTypeRef;
 
             public PlayerFactionClass(string m_PlayerTag, int m_RelationTypeRef)
             {
                 PlayerTag = m_PlayerTag;
-                RelationTypeRef = (RelationType)m_RelationTypeRef;
+                RelationTypeRef = (RelationType) m_RelationTypeRef;
             }
         }
 
@@ -423,6 +489,7 @@ namespace EmeraldAI
             public int SoundEffectID = 1;
             public AudioClip SoundEffectClip;
         }
+
         public List<InteractSoundClass> InteractSoundList = new List<InteractSoundClass>();
 
         [System.Serializable]
@@ -431,6 +498,7 @@ namespace EmeraldAI
             public int ItemID = 1;
             public GameObject ItemObject;
         }
+
         public List<ItemClass> ItemList = new List<ItemClass>();
 
         [System.Serializable]
@@ -445,6 +513,7 @@ namespace EmeraldAI
             public int AnimationID = 1;
             public AnimationClip EmoteAnimationClip;
         }
+
         public List<EmoteAnimationClass> EmoteAnimationList = new List<EmoteAnimationClass>();
 
         [System.Serializable]
@@ -459,6 +528,7 @@ namespace EmeraldAI
             public float AnimationSpeed = 1;
             public AnimationClip AnimationClip;
         }
+
         public List<AnimationClass> IdleAnimationList = new List<AnimationClass>();
         public List<AnimationClass> AttackAnimationList = new List<AnimationClass>();
         public List<AnimationClass> RunAttackAnimationList = new List<AnimationClass>();
@@ -471,26 +541,120 @@ namespace EmeraldAI
         public List<AnimationClass> RangedRunAttackAnimationList = new List<AnimationClass>();
         public List<AnimationClass> RangedDeathAnimationList = new List<AnimationClass>();
 
-        public AnimationClip Attack1Animation, Attack2Animation, Attack3Animation, Attack4Animation, Attack5Animation, Attack6Animation, RunAttack1Animation, RunAttack2Animation, RunAttack3Animation;
-        public AnimationClip Idle1Animation, Idle2Animation, Idle3Animation, Idle4Animation, Idle5Animation, Idle6Animation, IdleWarningAnimation;
-        public AnimationClip NonCombatTurnLeftAnimation, NonCombatTurnRightAnimation, CombatTurnLeftAnimation, CombatTurnRightAnimation;
-        public AnimationClip NonCombatIdleAnimation, WalkLeftAnimation, WalkStraightAnimation, WalkRightAnimation, RunLeftAnimation, RunStraightAnimation, RunRightAnimation;
-        public AnimationClip Emote1Animation, Emote2Animation, Emote3Animation, Emote4Animation, Emote5Animation, Emote6Animation, Emote7Animation, Emote8Animation, Emote9Animation, Emote10Animation;
-        public AnimationClip CombatIdleAnimation, CombatWalkLeftAnimation, CombatWalkStraightAnimation, CombatWalkBackAnimation, CombatWalkRightAnimation, CombatRunLeftAnimation, CombatRunStraightAnimation, CombatRunRightAnimation;
-        public AnimationClip Hit1Animation, Hit2Animation, Hit3Animation, Hit4Animation, Hit5Animation, Hit6Animation, CombatHit1Animation, CombatHit2Animation, CombatHit3Animation, CombatHit4Animation, 
-            CombatHit5Animation, CombatHit6Animation, BlockIdleAnimation, BlockHitAnimation, PutAwayWeaponAnimation, PullOutWeaponAnimation;
-        public AnimationClip Death1Animation, Death2Animation, Death3Animation, Death4Animation, Death5Animation, Death6Animation;
+        public AnimationClip Attack1Animation,
+            Attack2Animation,
+            Attack3Animation,
+            Attack4Animation,
+            Attack5Animation,
+            Attack6Animation,
+            RunAttack1Animation,
+            RunAttack2Animation,
+            RunAttack3Animation;
 
-        public AnimationClip RangedCombatIdleAnimation, RangedCombatWalkLeftAnimation, RangedCombatWalkStraightAnimation, RangedCombatWalkBackAnimation, RangedCombatWalkRightAnimation, 
-            RangedCombatRunLeftAnimation, RangedCombatRunStraightAnimation, RangedCombatRunRightAnimation, RangedIdleWarningAnimation, RangedPutAwayWeaponAnimation, RangedPullOutWeaponAnimation;
-        public AnimationClip RangedAttack1Animation, RangedAttack2Animation, RangedAttack3Animation, RangedAttack4Animation, RangedAttack5Animation, RangedAttack6Animation, RangedRunAttack1Animation, 
-            RangedRunAttack2Animation, RangedRunAttack3Animation;
-        public AnimationClip RangedCombatHit1Animation, RangedCombatHit2Animation, RangedCombatHit3Animation, RangedCombatHit4Animation, RangedCombatHit5Animation, RangedCombatHit6Animation, 
-            RangedCombatTurnLeftAnimation, RangedCombatTurnRightAnimation;
-        public AnimationClip RangedDeath1Animation, RangedDeath2Animation, RangedDeath3Animation, RangedDeath4Animation, RangedDeath5Animation, RangedDeath6Animation;
+        public AnimationClip Idle1Animation,
+            Idle2Animation,
+            Idle3Animation,
+            Idle4Animation,
+            Idle5Animation,
+            Idle6Animation,
+            IdleWarningAnimation;
 
-        [SerializeField]
-        public bool AnimatorControllerGenerated = false;
+        public AnimationClip NonCombatTurnLeftAnimation,
+            NonCombatTurnRightAnimation,
+            CombatTurnLeftAnimation,
+            CombatTurnRightAnimation;
+
+        public AnimationClip NonCombatIdleAnimation,
+            WalkLeftAnimation,
+            WalkStraightAnimation,
+            WalkRightAnimation,
+            RunLeftAnimation,
+            RunStraightAnimation,
+            RunRightAnimation;
+
+        public AnimationClip Emote1Animation,
+            Emote2Animation,
+            Emote3Animation,
+            Emote4Animation,
+            Emote5Animation,
+            Emote6Animation,
+            Emote7Animation,
+            Emote8Animation,
+            Emote9Animation,
+            Emote10Animation;
+
+        public AnimationClip CombatIdleAnimation,
+            CombatWalkLeftAnimation,
+            CombatWalkStraightAnimation,
+            CombatWalkBackAnimation,
+            CombatWalkRightAnimation,
+            CombatRunLeftAnimation,
+            CombatRunStraightAnimation,
+            CombatRunRightAnimation;
+
+        public AnimationClip Hit1Animation,
+            Hit2Animation,
+            Hit3Animation,
+            Hit4Animation,
+            Hit5Animation,
+            Hit6Animation,
+            CombatHit1Animation,
+            CombatHit2Animation,
+            CombatHit3Animation,
+            CombatHit4Animation,
+            CombatHit5Animation,
+            CombatHit6Animation,
+            BlockIdleAnimation,
+            BlockHitAnimation,
+            PutAwayWeaponAnimation,
+            PullOutWeaponAnimation;
+
+        public AnimationClip Death1Animation,
+            Death2Animation,
+            Death3Animation,
+            Death4Animation,
+            Death5Animation,
+            Death6Animation;
+
+        public AnimationClip RangedCombatIdleAnimation,
+            RangedCombatWalkLeftAnimation,
+            RangedCombatWalkStraightAnimation,
+            RangedCombatWalkBackAnimation,
+            RangedCombatWalkRightAnimation,
+            RangedCombatRunLeftAnimation,
+            RangedCombatRunStraightAnimation,
+            RangedCombatRunRightAnimation,
+            RangedIdleWarningAnimation,
+            RangedPutAwayWeaponAnimation,
+            RangedPullOutWeaponAnimation;
+
+        public AnimationClip RangedAttack1Animation,
+            RangedAttack2Animation,
+            RangedAttack3Animation,
+            RangedAttack4Animation,
+            RangedAttack5Animation,
+            RangedAttack6Animation,
+            RangedRunAttack1Animation,
+            RangedRunAttack2Animation,
+            RangedRunAttack3Animation;
+
+        public AnimationClip RangedCombatHit1Animation,
+            RangedCombatHit2Animation,
+            RangedCombatHit3Animation,
+            RangedCombatHit4Animation,
+            RangedCombatHit5Animation,
+            RangedCombatHit6Animation,
+            RangedCombatTurnLeftAnimation,
+            RangedCombatTurnRightAnimation;
+
+        public AnimationClip RangedDeath1Animation,
+            RangedDeath2Animation,
+            RangedDeath3Animation,
+            RangedDeath4Animation,
+            RangedDeath5Animation,
+            RangedDeath6Animation;
+
+        [SerializeField] public bool AnimatorControllerGenerated = false;
         public bool AnimationListsChanged = false;
         public string FilePath;
         public bool MissingRuntimeController = false;
@@ -580,26 +744,71 @@ namespace EmeraldAI
         public float MaxZAngle = 5;
         public int HealthPercentageToFlee = 10;
 
-        public float Idle1AnimationSpeed = 1, Idle2AnimationSpeed = 1, Idle3AnimationSpeed = 1, Idle4AnimationSpeed = 1, Idle5AnimationSpeed = 1, Idle6AnimationSpeed = 1;
+        public float Idle1AnimationSpeed = 1,
+            Idle2AnimationSpeed = 1,
+            Idle3AnimationSpeed = 1,
+            Idle4AnimationSpeed = 1,
+            Idle5AnimationSpeed = 1,
+            Idle6AnimationSpeed = 1;
+
         public float IdleWarningAnimationSpeed = 1;
         public float RangedIdleWarningAnimationSpeed = 1;
         public float IdleCombatAnimationSpeed = 1;
         public float RangedIdleCombatAnimationSpeed = 1;
         public float IdleNonCombatAnimationSpeed = 1;
-        public float Attack1AnimationSpeed = 1, Attack2AnimationSpeed = 1, Attack3AnimationSpeed = 1, Attack4AnimationSpeed = 1, Attack5AnimationSpeed = 1, Attack6AnimationSpeed = 1;
-        public float RangedAttack1AnimationSpeed = 1, RangedAttack2AnimationSpeed = 1, RangedAttack3AnimationSpeed = 1, RangedAttack4AnimationSpeed = 1, RangedAttack5AnimationSpeed = 1, RangedAttack6AnimationSpeed = 1;
+
+        public float Attack1AnimationSpeed = 1,
+            Attack2AnimationSpeed = 1,
+            Attack3AnimationSpeed = 1,
+            Attack4AnimationSpeed = 1,
+            Attack5AnimationSpeed = 1,
+            Attack6AnimationSpeed = 1;
+
+        public float RangedAttack1AnimationSpeed = 1,
+            RangedAttack2AnimationSpeed = 1,
+            RangedAttack3AnimationSpeed = 1,
+            RangedAttack4AnimationSpeed = 1,
+            RangedAttack5AnimationSpeed = 1,
+            RangedAttack6AnimationSpeed = 1;
+
         public float RunAttack1AnimationSpeed = 1, RunAttack2AnimationSpeed = 1, RunAttack3AnimationSpeed = 1;
-        public float RangedRunAttack1AnimationSpeed = 1, RangedRunAttack2AnimationSpeed = 1, RangedRunAttack3AnimationSpeed = 1;
+
+        public float RangedRunAttack1AnimationSpeed = 1,
+            RangedRunAttack2AnimationSpeed = 1,
+            RangedRunAttack3AnimationSpeed = 1;
+
         public float TurnLeftAnimationSpeed = 1;
         public float TurnRightAnimationSpeed = 1;
         public float CombatTurnLeftAnimationSpeed = 1;
         public float CombatTurnRightAnimationSpeed = 1;
         public float RangedCombatTurnLeftAnimationSpeed = 1;
         public float RangedCombatTurnRightAnimationSpeed = 1;
-        public float Death1AnimationSpeed = 1, Death2AnimationSpeed = 1, Death3AnimationSpeed = 1, Death4AnimationSpeed = 1, Death5AnimationSpeed = 1, Death6AnimationSpeed = 1;
-        public float RangedDeath1AnimationSpeed = 1, RangedDeath2AnimationSpeed = 1, RangedDeath3AnimationSpeed = 1, RangedDeath4AnimationSpeed = 1, RangedDeath5AnimationSpeed = 1, RangedDeath6AnimationSpeed = 1;
-        public float Emote1AnimationSpeed = 1, Emote2AnimationSpeed = 1, Emote3AnimationSpeed = 1, Emote4AnimationSpeed = 1, Emote5AnimationSpeed = 1, Emote6AnimationSpeed = 1, 
-            Emote7AnimationSpeed = 1, Emote8AnimationSpeed = 1, Emote9AnimationSpeed = 1, Emote10AnimationSpeed = 1;
+
+        public float Death1AnimationSpeed = 1,
+            Death2AnimationSpeed = 1,
+            Death3AnimationSpeed = 1,
+            Death4AnimationSpeed = 1,
+            Death5AnimationSpeed = 1,
+            Death6AnimationSpeed = 1;
+
+        public float RangedDeath1AnimationSpeed = 1,
+            RangedDeath2AnimationSpeed = 1,
+            RangedDeath3AnimationSpeed = 1,
+            RangedDeath4AnimationSpeed = 1,
+            RangedDeath5AnimationSpeed = 1,
+            RangedDeath6AnimationSpeed = 1;
+
+        public float Emote1AnimationSpeed = 1,
+            Emote2AnimationSpeed = 1,
+            Emote3AnimationSpeed = 1,
+            Emote4AnimationSpeed = 1,
+            Emote5AnimationSpeed = 1,
+            Emote6AnimationSpeed = 1,
+            Emote7AnimationSpeed = 1,
+            Emote8AnimationSpeed = 1,
+            Emote9AnimationSpeed = 1,
+            Emote10AnimationSpeed = 1;
+
         public float WalkAnimationSpeed = 1;
         public float RunAnimationSpeed = 1;
         public float NonCombatWalkAnimationSpeed = 1;
@@ -608,10 +817,27 @@ namespace EmeraldAI
         public float CombatRunAnimationSpeed = 1;
         public float RangedCombatWalkAnimationSpeed = 1;
         public float RangedCombatRunAnimationSpeed = 1;
-        public float Hit1AnimationSpeed = 1, Hit2AnimationSpeed = 1, Hit3AnimationSpeed = 1, Hit4AnimationSpeed = 1, Hit5AnimationSpeed = 1, Hit6AnimationSpeed = 1;
-        public float CombatHit1AnimationSpeed = 1, CombatHit2AnimationSpeed = 1, CombatHit3AnimationSpeed = 1, CombatHit4AnimationSpeed = 1, CombatHit5AnimationSpeed = 1, CombatHit6AnimationSpeed = 1;
-        public float RangedCombatHit1AnimationSpeed = 1, RangedCombatHit2AnimationSpeed = 1, RangedCombatHit3AnimationSpeed = 1, 
-            RangedCombatHit4AnimationSpeed = 1, RangedCombatHit5AnimationSpeed = 1, RangedCombatHit6AnimationSpeed = 1;
+
+        public float Hit1AnimationSpeed = 1,
+            Hit2AnimationSpeed = 1,
+            Hit3AnimationSpeed = 1,
+            Hit4AnimationSpeed = 1,
+            Hit5AnimationSpeed = 1,
+            Hit6AnimationSpeed = 1;
+
+        public float CombatHit1AnimationSpeed = 1,
+            CombatHit2AnimationSpeed = 1,
+            CombatHit3AnimationSpeed = 1,
+            CombatHit4AnimationSpeed = 1,
+            CombatHit5AnimationSpeed = 1,
+            CombatHit6AnimationSpeed = 1;
+
+        public float RangedCombatHit1AnimationSpeed = 1,
+            RangedCombatHit2AnimationSpeed = 1,
+            RangedCombatHit3AnimationSpeed = 1,
+            RangedCombatHit4AnimationSpeed = 1,
+            RangedCombatHit5AnimationSpeed = 1,
+            RangedCombatHit6AnimationSpeed = 1;
 
         public int StartingBehaviorRef;
         public int StartingConfidenceRef;
@@ -623,95 +849,267 @@ namespace EmeraldAI
         public Renderer Renderer3;
         public Renderer Renderer4;
 
-        public enum DeathType {Animation = 0, Ragdoll};
+        public enum DeathType
+        {
+            Animation = 0,
+            Ragdoll
+        };
+
         public DeathType DeathTypeRef = DeathType.Animation;
 
-        public enum CurrentBehavior { Passive = 0, Cautious = 1, Companion = 2, Aggressive = 3, Pet = 4 };
+        public enum CurrentBehavior
+        {
+            Passive = 0,
+            Cautious = 1,
+            Companion = 2,
+            Aggressive = 3,
+            Pet = 4
+        };
+
         public CurrentBehavior BehaviorRef = CurrentBehavior.Passive;
 
-        public enum DetectionType { Trigger = 0, LineOfSight = 1 };
+        public enum DetectionType
+        {
+            Trigger = 0,
+            LineOfSight = 1
+        };
+
         public DetectionType DetectionTypeRef = DetectionType.Trigger;
 
-        public enum MaxChaseDistanceType { TargetDistance = 0, StartingDistance = 1 };
+        public enum MaxChaseDistanceType
+        {
+            TargetDistance = 0,
+            StartingDistance = 1
+        };
+
         public MaxChaseDistanceType MaxChaseDistanceTypeRef = MaxChaseDistanceType.TargetDistance;
 
-        public enum ConfidenceType { Coward = 0, Brave = 1, Foolhardy = 2 };
+        public enum ConfidenceType
+        {
+            Coward = 0,
+            Brave = 1,
+            Foolhardy = 2
+        };
+
         public ConfidenceType ConfidenceRef = ConfidenceType.Brave;
 
-        public enum OptimizedState { Active = 0, Inactive = 1 };
+        public enum OptimizedState
+        {
+            Active = 0,
+            Inactive = 1
+        };
+
         public OptimizedState OptimizedStateRef = OptimizedState.Inactive;
 
-        public enum CurrentDetection { Alert = 0, Unaware = 1 };
+        public enum CurrentDetection
+        {
+            Alert = 0,
+            Unaware = 1
+        };
+
         public CurrentDetection CurrentDetectionRef = CurrentDetection.Unaware;
 
-        public enum TargetType { Player = 0, AI = 1, NonAITarget = 2 };
+        public enum TargetType
+        {
+            Player = 0,
+            AI = 1,
+            NonAITarget = 2
+        };
+
         public TargetType TargetTypeRef = TargetType.Player;
 
-        public enum CombatState { NotActive = 0, Active = 1 };
-        public CombatState CombatStateRef = CombatState.NotActive;       
+        public enum CombatState
+        {
+            NotActive = 0,
+            Active = 1
+        };
 
-        public enum CombatType { Offensive = 0, Defensive = 1 };
-        public CombatType CombatTypeRef = CombatType.Offensive;    
+        public CombatState CombatStateRef = CombatState.NotActive;
 
-        public enum RefillHealth {Disable = 0, Instantly = 1, OverTime = 2};
+        public enum CombatType
+        {
+            Offensive = 0,
+            Defensive = 1
+        };
+
+        public CombatType CombatTypeRef = CombatType.Offensive;
+
+        public enum RefillHealth
+        {
+            Disable = 0,
+            Instantly = 1,
+            OverTime = 2
+        };
+
         public RefillHealth RefillHealthType = RefillHealth.OverTime;
 
-        public enum WanderType { Dynamic = 0, Waypoints = 1, Stationary = 2, Destination = 3 };
+        public enum WanderType
+        {
+            Dynamic = 0,
+            Waypoints = 1,
+            Stationary = 2,
+            Destination = 3
+        };
+
         public WanderType WanderTypeRef = WanderType.Dynamic;
 
-        public enum WaypointType { Loop = 0, Reverse = 1, Random = 2 };
-        public WaypointType WaypointTypeRef = WaypointType.Loop;        
+        public enum WaypointType
+        {
+            Loop = 0,
+            Reverse = 1,
+            Random = 2
+        };
 
-        public enum AlignmentQuality { Low = 0, Medium = 1, High = 2 };
+        public WaypointType WaypointTypeRef = WaypointType.Loop;
+
+        public enum AlignmentQuality
+        {
+            Low = 0,
+            Medium = 1,
+            High = 2
+        };
+
         public AlignmentQuality AlignmentQualityRef = AlignmentQuality.Medium;
 
-        public enum ObstructionDetectionQuality { Low = 0, Medium = 1, High = 2 };
+        public enum ObstructionDetectionQuality
+        {
+            Low = 0,
+            Medium = 1,
+            High = 2
+        };
+
         public ObstructionDetectionQuality ObstructionDetectionQualityRef = ObstructionDetectionQuality.Medium;
 
-        public enum ActionAnimation { Eat = 0, Sleep = 1, Talk = 2, Work = 3, Interact = 4 };
+        public enum ActionAnimation
+        {
+            Eat = 0,
+            Sleep = 1,
+            Talk = 2,
+            Work = 3,
+            Interact = 4
+        };
+
         public ActionAnimation ActionAnimationRef = ActionAnimation.Talk;
 
-        public enum PickTargetMethod { Closest = 0, FirstDetected = 1, Random = 2 };
+        public enum PickTargetMethod
+        {
+            Closest = 0,
+            FirstDetected = 1,
+            Random = 2
+        };
+
         public PickTargetMethod PickTargetMethodRef = PickTargetMethod.Closest;
 
-        public enum WeaponType { Melee = 0, Ranged = 1, Both = 2};
+        public enum WeaponType
+        {
+            Melee = 0,
+            Ranged = 1,
+            Both = 2
+        };
+
         public WeaponType WeaponTypeRef = WeaponType.Melee;
 
-        public enum StartingWeaponType { Melee = 0, Ranged = 1};
+        public enum StartingWeaponType
+        {
+            Melee = 0,
+            Ranged = 1
+        };
+
         public StartingWeaponType StartingWeaponTypeRef = StartingWeaponType.Melee;
 
-        public enum AvoidanceQuality { None = 0, Low = 1, Medium = 2, Good = 3, High = 4 };
+        public enum AvoidanceQuality
+        {
+            None = 0,
+            Low = 1,
+            Medium = 2,
+            Good = 3,
+            High = 4
+        };
+
         public AvoidanceQuality AvoidanceQualityRef = AvoidanceQuality.Medium;
 
-        public enum TargetObstructedAction { StayStationary = 0, MoveCloserImmediately, MoveCloserAfterSetSeconds };
+        public enum TargetObstructedAction
+        {
+            StayStationary = 0,
+            MoveCloserImmediately,
+            MoveCloserAfterSetSeconds
+        };
+
         public TargetObstructedAction TargetObstructedActionRef = TargetObstructedAction.StayStationary;
 
         public AnimatorTypeState AnimatorType = AnimatorTypeState.NavMeshDriven;
-        public enum AnimatorTypeState { RootMotion, NavMeshDriven };
+
+        public enum AnimatorTypeState
+        {
+            RootMotion,
+            NavMeshDriven
+        };
 
         public MovementState StartingMovementState = MovementState.Run;
         public MovementState CurrentMovementState = MovementState.Walk;
-        public enum MovementState { Walk = 0, Run };
+
+        public enum MovementState
+        {
+            Walk = 0,
+            Run
+        };
 
         public BlockingState CurrentBlockingState = BlockingState.NotBlocking;
-        public enum BlockingState { Blocking, NotBlocking };
+
+        public enum BlockingState
+        {
+            Blocking,
+            NotBlocking
+        };
 
         public BackupType BackupTypeRef = BackupType.Instant;
-        public enum BackupType { Off = 0, Instant, Odds };
 
-        public enum AnimatorCullingModes { AlwaysAnimate, CullUpdateTransforms };
+        public enum BackupType
+        {
+            Off = 0,
+            Instant,
+            Odds
+        };
+
+        public enum AnimatorCullingModes
+        {
+            AlwaysAnimate,
+            CullUpdateTransforms
+        };
+
         public AnimatorCullingModes AnimatorCullingMode = AnimatorCullingModes.AlwaysAnimate;
 
-        public enum CurrentMeleeAttackTypes { StationaryAttack, RunAttack };
+        public enum CurrentMeleeAttackTypes
+        {
+            StationaryAttack,
+            RunAttack
+        };
+
         public CurrentMeleeAttackTypes CurrentMeleeAttackType = CurrentMeleeAttackTypes.StationaryAttack;
 
-        public enum TotalLODsEnum { Two = 0, Three = 1, Four = 2 };
+        public enum TotalLODsEnum
+        {
+            Two = 0,
+            Three = 1,
+            Four = 2
+        };
+
         public TotalLODsEnum TotalLODsRef = TotalLODsEnum.Three;
 
-        public enum IKTypes { UnityIK, EmeraldIK };
+        public enum IKTypes
+        {
+            UnityIK,
+            EmeraldIK
+        };
+
         public IKTypes IKType = IKTypes.UnityIK;
 
-        public enum YesOrNo { No = 0, Yes = 1 };
+        public enum YesOrNo
+        {
+            No = 0,
+            Yes = 1
+        };
+
         public YesOrNo UseRandomRotationOnStartRef = YesOrNo.No;
         public YesOrNo DisableAIWhenNotInViewRef = YesOrNo.No;
         public YesOrNo UseDeactivateDelayRef = YesOrNo.No;
@@ -732,7 +1130,7 @@ namespace EmeraldAI
         public YesOrNo UseAINameUIOutlineEffect = YesOrNo.Yes;
         public YesOrNo UseAILevelUIOutlineEffect = YesOrNo.Yes;
         public YesOrNo UseCustomFontAIName = YesOrNo.No;
-        public YesOrNo UseCustomFontAILevel = YesOrNo.No;   
+        public YesOrNo UseCustomFontAILevel = YesOrNo.No;
         public YesOrNo AlignAIWithGroundRef = YesOrNo.No;
         public YesOrNo CreateHealthBarsRef = YesOrNo.No;
         public YesOrNo UseNonAITagRef = YesOrNo.No;
@@ -800,12 +1198,17 @@ namespace EmeraldAI
         public List<AudioClip> ImpactSounds = new List<AudioClip>();
         public List<AudioClip> CriticalHitSounds = new List<AudioClip>();
 
-        [SerializeField]
-        public List<int> AIFactionsList = new List<int>();
+        [SerializeField] public List<int> AIFactionsList = new List<int>();
         public int TargetTagsIndex;
 
         public Vector3 BloodPosOffset;
-        public enum BloodEffectPositionType {BaseTransform = 0, HitTransform};
+
+        public enum BloodEffectPositionType
+        {
+            BaseTransform = 0,
+            HitTransform
+        };
+
         public BloodEffectPositionType BloodEffectPositionTypeRef = BloodEffectPositionType.HitTransform;
 
         public GameObject HealthBarCanvas;
@@ -886,6 +1289,7 @@ namespace EmeraldAI
         public LayerMask AIAvoidanceLayerMask;
         public LayerMask DynamicWanderLayerMask = ~0;
         public LayerMask BackupLayerMask = ~0;
+
         #endregion
 
         //Initialize Emerald AI and its components
@@ -911,15 +1315,17 @@ namespace EmeraldAI
                 if (WanderTypeRef == WanderType.Destination)
                 {
                     Debug.LogError("The AI ''" + gameObject.name + "'s'' Destination is not reachable. " +
-                        "The AI's Wander Type has been set to Stationary. Please check the Destination and make sure it is on the NavMesh and is reachable.");
+                                   "The AI's Wander Type has been set to Stationary. Please check the Destination and make sure it is on the NavMesh and is reachable.");
                     m_NavMeshAgent.stoppingDistance = StoppingDistance;
                     StartingDestination = transform.position + (transform.forward * StoppingDistance);
                     WanderTypeRef = WanderType.Stationary;
                 }
                 else if (WanderTypeRef == WanderType.Waypoints)
                 {
-                    Debug.LogError("The AI ''" + gameObject.name + "'s'' Waypoint #" + (WaypointIndex + 1) + " is not reachable. " +
-                        "The AI's Wander Type has been set to Stationary. Please check the Waypoint #" + (WaypointIndex + 1) + " and make sure it is on the NavMesh and is reachable.");
+                    Debug.LogError("The AI ''" + gameObject.name + "'s'' Waypoint #" + (WaypointIndex + 1) +
+                                   " is not reachable. " +
+                                   "The AI's Wander Type has been set to Stationary. Please check the Waypoint #" +
+                                   (WaypointIndex + 1) + " and make sure it is on the NavMesh and is reachable.");
                     m_NavMeshAgent.stoppingDistance = StoppingDistance;
                     StartingDestination = transform.position + (transform.forward * StoppingDistance);
                     WanderTypeRef = WanderType.Stationary;
@@ -930,15 +1336,17 @@ namespace EmeraldAI
                 if (WanderTypeRef == WanderType.Destination)
                 {
                     Debug.LogError("The AI ''" + gameObject.name + "'s'' Destination is not reachable. " +
-                        "The AI's Wander Type has been set to Stationary. Please check the Destination and make sure it is on the NavMesh.");
+                                   "The AI's Wander Type has been set to Stationary. Please check the Destination and make sure it is on the NavMesh.");
                     m_NavMeshAgent.stoppingDistance = StoppingDistance;
                     StartingDestination = transform.position + (transform.forward * StoppingDistance);
                     WanderTypeRef = WanderType.Stationary;
                 }
                 else if (WanderTypeRef == WanderType.Waypoints)
                 {
-                    Debug.LogError("The AI ''" + gameObject.name + "'s'' Waypoint #" + (WaypointIndex + 1) + " is not reachable. " +
-                        "The AI's Wander Type has been set to Stationary. Please check the Waypoint #" + (WaypointIndex + 1) + " and make sure it is on the NavMesh and is reachable.");
+                    Debug.LogError("The AI ''" + gameObject.name + "'s'' Waypoint #" + (WaypointIndex + 1) +
+                                   " is not reachable. " +
+                                   "The AI's Wander Type has been set to Stationary. Please check the Waypoint #" +
+                                   (WaypointIndex + 1) + " and make sure it is on the NavMesh and is reachable.");
                     m_NavMeshAgent.stoppingDistance = StoppingDistance;
                     StartingDestination = transform.position + (transform.forward * StoppingDistance);
                     WanderTypeRef = WanderType.Stationary;
@@ -958,25 +1366,30 @@ namespace EmeraldAI
                 {
                     DeactivateTimer += Time.deltaTime;
 
-                    if (UseDeactivateDelayRef == YesOrNo.Yes && DeactivateTimer >= DeactivateDelay || UseDeactivateDelayRef == YesOrNo.No)
+                    if (UseDeactivateDelayRef == YesOrNo.Yes && DeactivateTimer >= DeactivateDelay ||
+                        UseDeactivateDelayRef == YesOrNo.No)
                     {
                         Deactivate();
                     }
                 }
-                else if (!Renderer1.isVisible && !Renderer2.isVisible && !Renderer3.isVisible && TotalLODsRef == TotalLODsEnum.Three)
+                else if (!Renderer1.isVisible && !Renderer2.isVisible && !Renderer3.isVisible &&
+                         TotalLODsRef == TotalLODsEnum.Three)
                 {
                     DeactivateTimer += Time.deltaTime;
 
-                    if (UseDeactivateDelayRef == YesOrNo.Yes && DeactivateTimer >= DeactivateDelay || UseDeactivateDelayRef == YesOrNo.No)
+                    if (UseDeactivateDelayRef == YesOrNo.Yes && DeactivateTimer >= DeactivateDelay ||
+                        UseDeactivateDelayRef == YesOrNo.No)
                     {
                         Deactivate();
                     }
                 }
-                else if (!Renderer1.isVisible && !Renderer2.isVisible && !Renderer3.isVisible && !Renderer4.isVisible && TotalLODsRef == TotalLODsEnum.Four)
+                else if (!Renderer1.isVisible && !Renderer2.isVisible && !Renderer3.isVisible && !Renderer4.isVisible &&
+                         TotalLODsRef == TotalLODsEnum.Four)
                 {
                     DeactivateTimer += Time.deltaTime;
-                    
-                    if (UseDeactivateDelayRef == YesOrNo.Yes && DeactivateTimer >= DeactivateDelay || UseDeactivateDelayRef == YesOrNo.No)
+
+                    if (UseDeactivateDelayRef == YesOrNo.Yes && DeactivateTimer >= DeactivateDelay ||
+                        UseDeactivateDelayRef == YesOrNo.No)
                     {
                         Deactivate();
                     }
@@ -1048,7 +1461,7 @@ namespace EmeraldAI
                     DeathDelayTimer += Time.deltaTime;
 
                     if (DeathDelayTimer > DeathDelay)
-                    {                       
+                    {
                         EmeraldBehaviorsComponent.DefaultState();
                     }
                 }
@@ -1059,12 +1472,13 @@ namespace EmeraldAI
                 EmeraldBehaviorsComponent.CheckAnimationStates();
 
                 //If our AI is not in combat, wander according to its Wander Type.
-                if (AIAgentActive && CombatStateRef == CombatState.NotActive && !DeathDelayActive && BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet)
-                {        
+                if (AIAgentActive && CombatStateRef == CombatState.NotActive && !DeathDelayActive &&
+                    BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet)
+                {
                     Wander();
                 }
                 else if (AIAgentActive && CombatStateRef == CombatState.NotActive && !DeathDelayActive)
-                {                 
+                {
                     if (BehaviorRef == CurrentBehavior.Companion || BehaviorRef == CurrentBehavior.Pet)
                     {
                         if (CurrentFollowTarget != null)
@@ -1130,12 +1544,14 @@ namespace EmeraldAI
                     EmeraldBehaviorsComponent.AggressiveBehavior();
                 }
                 //Handles our AI's Coward Behavior using the EmeraldBehaviorsComponent
-                else if (BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef == ConfidenceType.Coward && CombatStateRef == CombatState.Active && AIAgentActive)
+                else if (BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef == ConfidenceType.Coward &&
+                         CombatStateRef == CombatState.Active && AIAgentActive)
                 {
                     EmeraldBehaviorsComponent.CowardBehavior();
                 }
                 //Handles our AI's Cautious Behavior using the EmeraldBehaviorsComponent
-                else if (BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef != ConfidenceType.Coward && CombatStateRef == CombatState.Active && AIAgentActive)
+                else if (BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef != ConfidenceType.Coward &&
+                         CombatStateRef == CombatState.Active && AIAgentActive)
                 {
                     EmeraldBehaviorsComponent.CautiousBehavior();
                 }
@@ -1159,14 +1575,17 @@ namespace EmeraldAI
                 //If our target is obstructed for 3 seconds, search for a new closer target which will most likely be the object obstructing the AI's LOS.
                 if (TargetObstructed && WeaponTypeRef == WeaponType.Ranged && CombatStateRef == CombatState.Active)
                 {
-                    if (EmeraldDetectionComponent.CurrentObstruction != null && EmeraldDetectionComponent.CurrentObstruction.CompareTag(EmeraldTag))
+                    if (EmeraldDetectionComponent.CurrentObstruction != null &&
+                        EmeraldDetectionComponent.CurrentObstruction.CompareTag(EmeraldTag))
                     {
                         m_ObstructedTimer += Time.deltaTime;
 
                         if (m_ObstructedTimer >= 2.5f)
                         {
-                            int m_ReceivedFaction = EmeraldDetectionComponent.CurrentObstruction.GetComponent<EmeraldAISystem>().CurrentFaction;
-                            if (AIFactionsList.Contains(m_ReceivedFaction) && FactionRelations[AIFactionsList.IndexOf(m_ReceivedFaction)] == 0)
+                            int m_ReceivedFaction = EmeraldDetectionComponent.CurrentObstruction
+                                .GetComponent<EmeraldAISystem>().CurrentFaction;
+                            if (AIFactionsList.Contains(m_ReceivedFaction) &&
+                                FactionRelations[AIFactionsList.IndexOf(m_ReceivedFaction)] == 0)
                             {
                                 EmeraldDetectionComponent.SearchForTarget();
                             }
@@ -1174,8 +1593,8 @@ namespace EmeraldAI
                             {
                                 EmeraldDetectionComponent.SearchForRandomTarget = true;
                                 EmeraldDetectionComponent.SearchForTarget();
-                            }                           
-                            
+                            }
+
                             m_ObstructedTimer = 0;
                         }
                     }
@@ -1188,7 +1607,7 @@ namespace EmeraldAI
         }
 
         //Controls the AI's weapon type switching from happening too often
-        void WeaponSwitchCooldown ()
+        void WeaponSwitchCooldown()
         {
             m_WeaponTypeSwitchDelay = false;
         }
@@ -1196,7 +1615,7 @@ namespace EmeraldAI
         /// <summary>
         /// Updates the AI's weapon type to switch between ranged and melee.
         /// </summary>
-        void UpdateWeaponTypeState ()
+        void UpdateWeaponTypeState()
         {
             if (SwitchWeaponTypeTriggered && !m_WeaponTypeSwitchDelay)
             {
@@ -1208,21 +1627,29 @@ namespace EmeraldAI
             if (EnableBothWeaponTypes == YesOrNo.Yes)
             {
                 //Switches the current weapon type based on distance.
-                if (SwitchWeaponType == SwitchWeaponTypes.Distance && CurrentTarget != null && !m_WeaponTypeSwitchDelay && !IsSwitchingWeapons && !IsAttacking && !IsMoving && !IsBackingUp && !IsTurning)
+                if (SwitchWeaponType == SwitchWeaponTypes.Distance && CurrentTarget != null &&
+                    !m_WeaponTypeSwitchDelay && !IsSwitchingWeapons && !IsAttacking && !IsMoving && !IsBackingUp &&
+                    !IsTurning)
                 {
-                    if (CurrentTarget != null && Vector3.Distance(CurrentTarget.position, transform.position) > SwitchWeaponTypesDistance && WeaponTypeRef == WeaponType.Melee && !SwitchWeaponTypeTriggered)
+                    if (CurrentTarget != null &&
+                        Vector3.Distance(CurrentTarget.position, transform.position) > SwitchWeaponTypesDistance &&
+                        WeaponTypeRef == WeaponType.Melee && !SwitchWeaponTypeTriggered)
                     {
-                        SwitchWeaponCoroutine = StartCoroutine(SwitchCurrentWeaponType("Ranged")); //Switch to the Ranged Weapon Type
+                        SwitchWeaponCoroutine =
+                            StartCoroutine(SwitchCurrentWeaponType("Ranged")); //Switch to the Ranged Weapon Type
                         SwitchWeaponTypeTriggered = true;
                     }
 
-                    if (CurrentTarget != null && Vector3.Distance(CurrentTarget.position, transform.position) <= SwitchWeaponTypesDistance && WeaponTypeRef == WeaponType.Ranged && !SwitchWeaponTypeTriggered)
+                    if (CurrentTarget != null &&
+                        Vector3.Distance(CurrentTarget.position, transform.position) <= SwitchWeaponTypesDistance &&
+                        WeaponTypeRef == WeaponType.Ranged && !SwitchWeaponTypeTriggered)
                     {
                         //Fade out the look at controller.
                         if (UseHeadLookRef == YesOrNo.Yes && EmeraldLookAtComponent.BodyWeight > 0)
                             EmeraldLookAtComponent.FadeOutBodyIK();
 
-                        SwitchWeaponCoroutine = StartCoroutine(SwitchCurrentWeaponType("Melee")); //Switch to the Melee Weapon Type
+                        SwitchWeaponCoroutine =
+                            StartCoroutine(SwitchCurrentWeaponType("Melee")); //Switch to the Melee Weapon Type
                         SwitchWeaponTypeTriggered = true;
                     }
                 }
@@ -1232,16 +1659,19 @@ namespace EmeraldAI
                     if (!IsSwitchingWeapons && !IsEquipping && !IsMoving)
                         SwitchWeaponTimer += Time.deltaTime;
 
-                    if (CurrentTarget != null && SwitchWeaponTimer >= SwitchWeaponTime && !IsSwitchingWeapons && !IsAttacking && !IsMoving && !IsBackingUp && !IsTurning)
+                    if (CurrentTarget != null && SwitchWeaponTimer >= SwitchWeaponTime && !IsSwitchingWeapons &&
+                        !IsAttacking && !IsMoving && !IsBackingUp && !IsTurning)
                     {
                         if (WeaponTypeRef == WeaponType.Melee)
-                            SwitchWeaponCoroutine = StartCoroutine(SwitchCurrentWeaponType("Ranged")); //Switch to the Ranged Weapon Type
+                            SwitchWeaponCoroutine =
+                                StartCoroutine(SwitchCurrentWeaponType("Ranged")); //Switch to the Ranged Weapon Type
                         else if (WeaponTypeRef == WeaponType.Ranged)
                         {
                             //Fade out the look at controller.
                             if (UseHeadLookRef == YesOrNo.Yes && EmeraldLookAtComponent.BodyWeight > 0)
                                 EmeraldLookAtComponent.FadeOutBodyIK();
-                            SwitchWeaponCoroutine = StartCoroutine(SwitchCurrentWeaponType("Melee")); //Switch to the Melee Weapon Type
+                            SwitchWeaponCoroutine =
+                                StartCoroutine(SwitchCurrentWeaponType("Melee")); //Switch to the Melee Weapon Type
                         }
                     }
                 }
@@ -1257,7 +1687,7 @@ namespace EmeraldAI
             yield return new WaitForSeconds(0.5f);
             EmeraldEventsManagerComponent.CancelAttackAnimation();
 
-            SwitchWeaponTime = Random.Range((float)SwitchWeaponTimeMin, (float)SwitchWeaponTimeMax +1);
+            SwitchWeaponTime = Random.Range((float) SwitchWeaponTimeMin, (float) SwitchWeaponTimeMax + 1);
             SwitchWeaponTimer = 0;
             BackingUpTimer = 0;
             AIAnimator.SetBool("Blocking", false);
@@ -1306,7 +1736,7 @@ namespace EmeraldAI
                 //Add the new weapon type's settings.
                 AIAnimator.ResetTrigger("Attack");
                 AttackDistance = MeleeAttackDistance;
-                AttackSpeed = Random.Range((float)MinMeleeAttackSpeed, MaxMeleeAttackSpeed + 1);
+                AttackSpeed = Random.Range((float) MinMeleeAttackSpeed, MaxMeleeAttackSpeed + 1);
                 TooCloseDistance = MeleeTooCloseDistance;
                 m_NavMeshAgent.stoppingDistance = MeleeAttackDistance;
             }
@@ -1339,7 +1769,7 @@ namespace EmeraldAI
                 //Add the new weapon type's settings.
                 AIAnimator.ResetTrigger("Attack");
                 AttackDistance = RangedAttackDistance;
-                AttackSpeed = Random.Range((float)MinRangedAttackSpeed, MaxRangedAttackSpeed + 1);
+                AttackSpeed = Random.Range((float) MinRangedAttackSpeed, MaxRangedAttackSpeed + 1);
                 TooCloseDistance = RangedTooCloseDistance;
                 m_NavMeshAgent.stoppingDistance = RangedAttackDistance;
             }
@@ -1350,7 +1780,7 @@ namespace EmeraldAI
         /// <summary>
         /// Moves our AI using Unity's NavMesh Agent 
         /// </summary>
-        void MoveAINavMesh ()
+        void MoveAINavMesh()
         {
             float speed = m_NavMeshAgent.desiredVelocity.magnitude;
             Vector3 velocity = Quaternion.Inverse(transform.rotation) * m_NavMeshAgent.desiredVelocity;
@@ -1362,12 +1792,16 @@ namespace EmeraldAI
                 AIAnimator.SetFloat("Direction", angle, DirectionDampTime, Time.deltaTime);
                 AlignAIMoving();
 
-                if (IsAttacking || IsEquipping || IsEmoting || m_NavMeshAgent.remainingDistance <= m_NavMeshAgent.stoppingDistance && !m_NavMeshAgent.pathPending || IsBlocking || IsTurning)
+                if (IsAttacking || IsEquipping || IsEmoting ||
+                    m_NavMeshAgent.remainingDistance <= m_NavMeshAgent.stoppingDistance &&
+                    !m_NavMeshAgent.pathPending || IsBlocking || IsTurning)
                 {
                     AIAnimator.SetFloat("Speed", 0, 0.3f, Time.deltaTime);
                     m_NavMeshAgent.speed = 0;
                 }
-                else if (m_NavMeshAgent.remainingDistance > m_NavMeshAgent.stoppingDistance && !m_NavMeshAgent.pathPending && !IsGettingHit && !IsAttacking && !IsSwitchingWeapons && !IsBackingUp && !IsEmoting && !IsEquipping && !IsBlocking && !IsTurning)
+                else if (m_NavMeshAgent.remainingDistance > m_NavMeshAgent.stoppingDistance &&
+                         !m_NavMeshAgent.pathPending && !IsGettingHit && !IsAttacking && !IsSwitchingWeapons &&
+                         !IsBackingUp && !IsEmoting && !IsEquipping && !IsBlocking && !IsTurning)
                 {
                     AIAnimator.SetBool("Idle Active", false);
                     AIAnimator.SetFloat("Speed", speed, 0.3f, Time.deltaTime);
@@ -1400,7 +1834,8 @@ namespace EmeraldAI
                 AIAnimator.SetFloat("Direction", angle, DirectionDampTime, Time.deltaTime);
                 AlignAIMoving();
 
-                if (IsAttacking || IsEquipping || IsEmoting || m_NavMeshAgent.remainingDistance <= m_NavMeshAgent.stoppingDistance || IsBlocking || IsTurning)
+                if (IsAttacking || IsEquipping || IsEmoting ||
+                    m_NavMeshAgent.remainingDistance <= m_NavMeshAgent.stoppingDistance || IsBlocking || IsTurning)
                 {
                     DelayTimer = 0;
                     AIAnimator.SetFloat("Speed", 0, 0.5f, Time.deltaTime);
@@ -1415,7 +1850,9 @@ namespace EmeraldAI
                         }
                     }
                 }
-                else if (m_NavMeshAgent.remainingDistance > m_NavMeshAgent.stoppingDistance  && !IsGettingHit && !IsAttacking && !IsSwitchingWeapons && !IsBackingUp && !IsEmoting && !IsEquipping && !IsBlocking && !IsTurning)
+                else if (m_NavMeshAgent.remainingDistance > m_NavMeshAgent.stoppingDistance && !IsGettingHit &&
+                         !IsAttacking && !IsSwitchingWeapons && !IsBackingUp && !IsEmoting && !IsEquipping &&
+                         !IsBlocking && !IsTurning)
                 {
                     DelayTimer = Mathf.Lerp(DelayTimer, 1, Time.deltaTime);
 
@@ -1426,13 +1863,15 @@ namespace EmeraldAI
                         AIAnimator.SetBool("Idle Active", false);
 
                         //Force walk movement if getting close to an AI's destination. This helps prevent the AI from running into its target as Root Motion with NavMesh needs a bit of time to stop.
-                        if (m_NavMeshAgent.remainingDistance < (m_NavMeshAgent.stoppingDistance + 4f) && BehaviorRef != CurrentBehavior.Cautious && ConfidenceRef != ConfidenceType.Coward)
+                        if (m_NavMeshAgent.remainingDistance < (m_NavMeshAgent.stoppingDistance + 4f) &&
+                            BehaviorRef != CurrentBehavior.Cautious && ConfidenceRef != ConfidenceType.Coward)
                         {
                             AIAnimator.SetFloat("Speed", Mathf.Min(speed, 0.1f), 0.15f, Time.deltaTime);
 
                             if (WalkAnimationSpeed <= 1f)
                             {
-                                m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed, WalkAnimationSpeed * 0.1f, Time.deltaTime * 30);
+                                m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed, WalkAnimationSpeed * 0.1f,
+                                    Time.deltaTime * 30);
                             }
                             else if (WalkAnimationSpeed > 1f)
                             {
@@ -1444,17 +1883,20 @@ namespace EmeraldAI
                             AIAnimator.SetFloat("Speed", speed, 0.3f, Time.deltaTime);
                             if (CurrentMovementState == MovementState.Run)
                             {
-                                m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed, RunAnimationSpeed, Time.deltaTime);
+                                m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed, RunAnimationSpeed,
+                                    Time.deltaTime);
                             }
                             else if (CurrentMovementState == MovementState.Walk)
                             {
                                 if (WalkAnimationSpeed <= 1f)
                                 {
-                                    m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed, WalkAnimationSpeed * 0.1f, Time.deltaTime * 3);
+                                    m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed,
+                                        WalkAnimationSpeed * 0.1f, Time.deltaTime * 3);
                                 }
                                 else if (WalkAnimationSpeed > 1f)
                                 {
-                                    m_NavMeshAgent.speed = Mathf.LerpAngle(m_NavMeshAgent.speed, 0.1f, Time.deltaTime * 3);
+                                    m_NavMeshAgent.speed =
+                                        Mathf.LerpAngle(m_NavMeshAgent.speed, 0.1f, Time.deltaTime * 3);
                                 }
                             }
                         }
@@ -1486,7 +1928,9 @@ namespace EmeraldAI
                     if (RayCastUpdateTimer >= RayCastUpdateSeconds)
                     {
                         RaycastHit HitDown;
-                        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z), -transform.up, out HitDown, 2, AlignmentLayerMask))
+                        if (Physics.Raycast(
+                                new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z),
+                                -transform.up, out HitDown, 2, AlignmentLayerMask))
                         {
                             if (HitDown.transform != this.transform)
                             {
@@ -1504,7 +1948,8 @@ namespace EmeraldAI
                     //Only align the AI if the angle threshold is greater than 1.
                     if (angle > 1f)
                     {
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, NormalRotation, Time.deltaTime * AlignmentSpeed);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, NormalRotation,
+                            Time.deltaTime * AlignmentSpeed);
                     }
                 }
             }
@@ -1526,7 +1971,9 @@ namespace EmeraldAI
                 if (RayCastUpdateTimer >= RayCastUpdateSeconds && AlignAIWithGroundRef == YesOrNo.Yes)
                 {
                     RaycastHit HitDown;
-                    if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z), -transform.up, out HitDown, 2, AlignmentLayerMask))
+                    if (Physics.Raycast(
+                            new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z),
+                            -transform.up, out HitDown, 2, AlignmentLayerMask))
                     {
                         if (HitDown.transform != this.transform)
                         {
@@ -1537,6 +1984,7 @@ namespace EmeraldAI
                         }
                     }
                 }
+
                 RotateAIStationary();
             }
             else if (CombatStateRef == CombatState.NotActive || ConfidenceRef == ConfidenceType.Coward)
@@ -1556,11 +2004,13 @@ namespace EmeraldAI
         /// </summary>
         void RotateAIStationary()
         {
-            if (CombatStateRef == CombatState.Active && CurrentTarget && ConfidenceRef != ConfidenceType.Coward && !IsGettingHit)
+            if (CombatStateRef == CombatState.Active && CurrentTarget && ConfidenceRef != ConfidenceType.Coward &&
+                !IsGettingHit)
             {
                 //Get the angle between the current target and the AI. If using the alignment feature,
                 //adjust the angle to include the rotation difference of the AI's current surface angle.
-                Vector3 Direction = new Vector3(CurrentTarget.position.x, 0, CurrentTarget.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                Vector3 Direction = new Vector3(CurrentTarget.position.x, 0, CurrentTarget.position.z) -
+                                    new Vector3(transform.position.x, 0, transform.position.z);
                 float angle = Vector3.Angle(transform.forward, Direction);
                 DestinationDirection = Direction;
 
@@ -1581,12 +2031,14 @@ namespace EmeraldAI
                     {
                         Quaternion qTarget = Quaternion.LookRotation(DestinationDirection, Vector3.up);
                         Quaternion qGround = Quaternion.FromToRotation(Vector3.up, SurfaceNormal) * qTarget;
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qGround, Time.deltaTime * StationaryTurningSpeedCombat);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qGround,
+                            Time.deltaTime * StationaryTurningSpeedCombat);
                     }
                     else if (AlignAIWithGroundRef == YesOrNo.No)
                     {
                         Quaternion qTarget = Quaternion.LookRotation(DestinationDirection, Vector3.up);
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qTarget, Time.deltaTime * StationaryTurningSpeedCombat);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qTarget,
+                            Time.deltaTime * StationaryTurningSpeedCombat);
                     }
                 }
             }
@@ -1594,7 +2046,8 @@ namespace EmeraldAI
             {
                 //Get the angle between the current destination and the AI. If using the alignment feature,
                 //adjust the angle to include the rotation difference of the AI's current surface angle.
-                Vector3 Direction = new Vector3(m_NavMeshAgent.destination.x, 0, m_NavMeshAgent.destination.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                Vector3 Direction = new Vector3(m_NavMeshAgent.destination.x, 0, m_NavMeshAgent.destination.z) -
+                                    new Vector3(transform.position.x, 0, transform.position.z);
                 float angle = Vector3.Angle(transform.forward, Direction);
                 DestinationDirection = Direction;
 
@@ -1609,18 +2062,21 @@ namespace EmeraldAI
                     DestinationAdjustedAngle = Mathf.Abs(angle);
                 }
 
-                if (DestinationAdjustedAngle >= AngleToTurn && DestinationDirection != Vector3.zero && !RotateTowardsTarget && IsTurning)
+                if (DestinationAdjustedAngle >= AngleToTurn && DestinationDirection != Vector3.zero &&
+                    !RotateTowardsTarget && IsTurning)
                 {
                     if (AlignAIWithGroundRef == YesOrNo.Yes)
                     {
                         Quaternion qTarget = Quaternion.LookRotation(DestinationDirection, Vector3.up);
                         Quaternion qGround = Quaternion.FromToRotation(Vector3.up, SurfaceNormal) * qTarget;
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qGround, Time.deltaTime * StationaryTurningSpeedNonCombat);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qGround,
+                            Time.deltaTime * StationaryTurningSpeedNonCombat);
                     }
                     else if (AlignAIWithGroundRef == YesOrNo.No)
                     {
                         Quaternion qTarget = Quaternion.LookRotation(DestinationDirection, Vector3.up);
-                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qTarget, Time.deltaTime * StationaryTurningSpeedNonCombat);
+                        transform.rotation = Quaternion.RotateTowards(transform.rotation, qTarget,
+                            Time.deltaTime * StationaryTurningSpeedNonCombat);
                     }
 
                     TurnDirectionMet = false;
@@ -1640,13 +2096,17 @@ namespace EmeraldAI
                 }
             }
 
-            if (CombatStateRef == CombatState.NotActive && DestinationAdjustedAngle >= AngleToTurn && DestinationDirection != Vector3.zero && AIAgentActive &&  m_NavMeshAgent.remainingDistance > m_NavMeshAgent.stoppingDistance
-                || CombatStateRef == CombatState.Active && DestinationAdjustedAngle >= AngleToTurn && DestinationDirection != Vector3.zero && AIAgentActive && !IsAttacking && !IsGettingHit)
+            if (CombatStateRef == CombatState.NotActive && DestinationAdjustedAngle >= AngleToTurn &&
+                DestinationDirection != Vector3.zero && AIAgentActive &&
+                m_NavMeshAgent.remainingDistance > m_NavMeshAgent.stoppingDistance
+                || CombatStateRef == CombatState.Active && DestinationAdjustedAngle >= AngleToTurn &&
+                DestinationDirection != Vector3.zero && AIAgentActive && !IsAttacking && !IsGettingHit)
             {
                 if (TimeSinceStart < 0.5f)
                     return;
 
-                Vector3 cross = Vector3.Cross(transform.forward, Quaternion.LookRotation(DestinationDirection, Vector3.up) * Vector3.forward);
+                Vector3 cross = Vector3.Cross(transform.forward,
+                    Quaternion.LookRotation(DestinationDirection, Vector3.up) * Vector3.forward);
 
                 if (cross.y > 0f) //Right
                 {
@@ -1676,7 +2136,6 @@ namespace EmeraldAI
                     AIAnimator.SetBool("Turn Left", false);
                     AIAnimator.SetBool("Turn Right", false);
                 }
-                
             }
             else if (CombatStateRef == CombatState.Active)
             {
@@ -1691,15 +2150,17 @@ namespace EmeraldAI
         /// <summary>
         /// Generates a random waypoint, once an AI reaches its destination
         /// </summary>
-        public void Wander ()
+        public void Wander()
         {
-            if (WanderTypeRef == WanderType.Dynamic && m_NavMeshAgent.remainingDistance <= m_NavMeshAgent.stoppingDistance && !m_NavMeshAgent.pathPending && !IsEquipping)
+            if (WanderTypeRef == WanderType.Dynamic &&
+                m_NavMeshAgent.remainingDistance <= m_NavMeshAgent.stoppingDistance && !m_NavMeshAgent.pathPending &&
+                !IsEquipping)
             {
                 if (WaypointTimer == 0)
                 {
                     AIAnimator.SetBool("Idle Active", true);
                 }
-                
+
                 WaypointTimer += Time.deltaTime;
 
                 if (WaypointTimer >= WaitTime)
@@ -1711,19 +2172,22 @@ namespace EmeraldAI
                         AIAnimator.SetInteger("Idle Index", Random.Range(1, TotalIdleAnimations + 1));
                     }
 
-                    WaitTime = Random.Range((float)MinimumWaitTime, MaximumWaitTime + 1);
+                    WaitTime = Random.Range((float) MinimumWaitTime, MaximumWaitTime + 1);
                     WaypointTimer = 0;
                 }
             }
-            else if (WanderTypeRef == WanderType.Destination && m_NavMeshAgent.destination != SingleDestination && !AIReachedDestination && !IsEquipping)
+            else if (WanderTypeRef == WanderType.Destination && m_NavMeshAgent.destination != SingleDestination &&
+                     !AIReachedDestination && !IsEquipping)
             {
-                if (m_NavMeshAgent.remainingDistance <= StoppingDistance && !m_NavMeshAgent.pathPending && m_NavMeshAgent.velocity.magnitude != 0)
+                if (m_NavMeshAgent.remainingDistance <= StoppingDistance && !m_NavMeshAgent.pathPending &&
+                    m_NavMeshAgent.velocity.magnitude != 0)
                 {
                     AIReachedDestination = true;
                     ReachedDestinationEvent.Invoke();
                 }
             }
-            else if (WanderTypeRef == WanderType.Waypoints && !WaypointReverseActive && m_NavMeshAgent.destination != WaypointsList[WaypointIndex] && !IsEquipping)
+            else if (WanderTypeRef == WanderType.Waypoints && !WaypointReverseActive &&
+                     m_NavMeshAgent.destination != WaypointsList[WaypointIndex] && !IsEquipping)
             {
                 if (m_NavMeshAgent.remainingDistance <= StoppingDistance && !m_NavMeshAgent.pathPending)
                 {
@@ -1744,7 +2208,8 @@ namespace EmeraldAI
                             {
                                 AIAnimator.SetInteger("Idle Index", Random.Range(1, TotalIdleAnimations + 1));
                             }
-                            WaitTime = Random.Range((float)MinimumWaitTime, MaximumWaitTime + 1);
+
+                            WaitTime = Random.Range((float) MinimumWaitTime, MaximumWaitTime + 1);
                             Invoke("ResetWanderTimer", 0.1f);
                             NextWaypoint();
                         }
@@ -1765,6 +2230,7 @@ namespace EmeraldAI
                     {
                         AIAnimator.SetInteger("Idle Index", Random.Range(1, TotalIdleAnimations + 1));
                     }
+
                     StationaryIdleSeconds = Random.Range(StationaryIdleSecondsMin, StationaryIdleSecondsMax);
                     StationaryIdleTimer = 0;
                 }
@@ -1782,7 +2248,7 @@ namespace EmeraldAI
             }
         }
 
-        void ResetWanderTimer ()
+        void ResetWanderTimer()
         {
             WaypointTimer = 0;
             IdleActivated = false;
@@ -1791,7 +2257,7 @@ namespace EmeraldAI
         /// <summary>
         /// Allows our Companion and Pet AI to follow their Follow Target
         /// </summary>
-        public void FollowCompanionTarget ()
+        public void FollowCompanionTarget()
         {
             float DistanceFromFollower = Vector3.Distance(CurrentFollowTarget.position, transform.position);
             if (DistanceFromFollower > FollowingStoppingDistance && !IsEmoting)
@@ -1809,7 +2275,7 @@ namespace EmeraldAI
             }
         }
 
-        void ReverseDelay ()
+        void ReverseDelay()
         {
             m_NavMeshAgent.stoppingDistance = 0.1f;
             WaypointReverseActive = false;
@@ -1833,8 +2299,8 @@ namespace EmeraldAI
                     ReachedDestinationEvent.Invoke();
 
                     if (WaypointTypeRef == WaypointType.Reverse)
-                    {                     
-                        m_NavMeshAgent.destination = WaypointsList[WaypointsList.Count-1];
+                    {
+                        m_NavMeshAgent.destination = WaypointsList[WaypointsList.Count - 1];
                         WaypointsList.Reverse();
                         m_NavMeshAgent.stoppingDistance = 10;
                         WaypointReverseActive = true;
@@ -1852,7 +2318,7 @@ namespace EmeraldAI
                 m_LastWaypointIndex = WaypointIndex;
 
                 do
-                {                  
+                {
                     WaypointIndex = Random.Range(0, WaypointsList.Count);
                 } while (m_LastWaypointIndex == WaypointIndex);
 
@@ -1883,10 +2349,12 @@ namespace EmeraldAI
                     break;
                 }
 
-                NewDestination = StartingDestination + new Vector3(Random.insideUnitSphere.y, 0, Random.insideUnitSphere.z) * WanderRadius;
+                NewDestination = StartingDestination +
+                                 new Vector3(Random.insideUnitSphere.y, 0, Random.insideUnitSphere.z) * WanderRadius;
 
                 RaycastHit HitDown;
-                if (Physics.Raycast(new Vector3(NewDestination.x, NewDestination.y + 100, NewDestination.z), -transform.up, out HitDown, 200, DynamicWanderLayerMask, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(new Vector3(NewDestination.x, NewDestination.y + 100, NewDestination.z),
+                        -transform.up, out HitDown, 200, DynamicWanderLayerMask, QueryTriggerInteraction.Ignore))
                 {
                     if (HitDown.transform != this.transform)
                     {
@@ -1924,108 +2392,157 @@ namespace EmeraldAI
         /// </summary>
         void CreateEmeraldProjectile()
         {
-            if (CurrentTarget != null)
+            try
             {
-                float AdjustedAngle = TargetAngle();
-
-                if (AdjustedAngle <= 180 && !EmeraldLookAtComponent.LookAtInProgress)
+                if (CurrentTarget != null)
                 {
-                    if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Damage && OffensiveAbilities.Count > 0) //Offensive
+                    float AdjustedAngle = TargetAngle();
+
+                    if (AdjustedAngle <= 180 && !EmeraldLookAtComponent.LookAtInProgress)
                     {
-                        OnAttackEvent.Invoke(); //Invoke the AttackStart event
+                        if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Damage &&
+                            OffensiveAbilities.Count > 0) //Offensive
+                        {
+                            OnAttackEvent.Invoke(); //Invoke the AttackStart event
 
-                        if (TargetEmerald == null)
-                            CurrentProjectile = EmeraldAIObjectPool.Spawn(m_EmeraldAIAbility.AbilityEffect, RangedAttackTransform.position, Quaternion.LookRotation((CurrentTarget.position + (CurrentTarget.up * CurrentPositionModifier)) - RangedAttackTransform.position, transform.up));
-                        else
-                            CurrentProjectile = EmeraldAIObjectPool.Spawn(m_EmeraldAIAbility.AbilityEffect, RangedAttackTransform.position, Quaternion.LookRotation(TargetEmerald.HitPointTransform.position - RangedAttackTransform.position, transform.up));
+                            if (TargetEmerald == null)
+                                CurrentProjectile = EmeraldAIObjectPool.Spawn(m_EmeraldAIAbility.AbilityEffect,
+                                    RangedAttackTransform.position,
+                                    Quaternion.LookRotation(
+                                        (CurrentTarget.position + (CurrentTarget.up * CurrentPositionModifier)) -
+                                        RangedAttackTransform.position, transform.up));
+                            else
+                                CurrentProjectile = EmeraldAIObjectPool.Spawn(m_EmeraldAIAbility.AbilityEffect,
+                                    RangedAttackTransform.position,
+                                    Quaternion.LookRotation(
+                                        TargetEmerald.HitPointTransform.position - RangedAttackTransform.position,
+                                        transform.up));
 
-                        if (m_EmeraldAIAbility.UseCreateEffect == EmeraldAIAbility.Yes_No.Yes)
-                        {
-                            GameObject G = EmeraldAIObjectPool.SpawnEffect(m_EmeraldAIAbility.CreateEffect, RangedAttackTransform.position, RangedAttackTransform.rotation, m_EmeraldAIAbility.CastEffectTimeoutSeconds);
-                            G.transform.SetParent(RangedAttackTransform);
-                        }
-
-                        if (CurrentProjectile.GetComponent<EmeraldAIProjectile>() == null)
-                        {
-                            CurrentlyCreatedAbility = CurrentProjectile.AddComponent<EmeraldAIProjectile>();
-                        }
-                        else
-                        {
-                            CurrentlyCreatedAbility = CurrentProjectile.GetComponent<EmeraldAIProjectile>();
-                        }
-
-                        if (m_EmeraldAIAbility.UseCreateSound == EmeraldAIAbility.Yes_No.Yes && m_EmeraldAIAbility.CreateSoundsList.Count > 0)
-                        {
-                            AudioClip RandomCreateSound = m_EmeraldAIAbility.CreateSoundsList[Random.Range(0, m_EmeraldAIAbility.CreateSoundsList.Count)];
-                            if (RandomCreateSound != null)
-                                EmeraldEventsManagerComponent.PlaySoundClip(RandomCreateSound);
-                        }
-                        InitializeAbility(CurrentlyCreatedAbility, m_EmeraldAIAbility);
-                        CurrentProjectile.transform.SetParent(ObjectPool.transform);
-                        CurrentProjectile.GetComponent<EmeraldAIProjectile>().InitializeProjectile(this, m_EmeraldAIAbility); //Initialize the created projectile with the needed data
-                    }
-                    else if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Support && SupportAbilities.Count > 0 && !HealingCooldownActive) //Support
-                    {
-                        GameObject AbilityEffect = EmeraldAIObjectPool.SpawnEffect(m_EmeraldAIAbility.AbilityEffect, HitPointTransform.position, Quaternion.identity, m_EmeraldAIAbility.AbilityEffectTimeoutSeconds);
-                        if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Support && m_EmeraldAIAbility.SupportType == EmeraldAIAbility.SupportTypeEnum.OverTime)
-                        {
-                            EmeraldEventsManagerComponent.HealOverTimeAbility(m_EmeraldAIAbility);                           
-                        }
-                        else if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Support && m_EmeraldAIAbility.SupportType == EmeraldAIAbility.SupportTypeEnum.Instant)
-                        {
-                            CurrentHealth += m_EmeraldAIAbility.AbilitySupportAmount;
-                            
-                            if (CurrentHealth > StartingHealth)
+                            if (m_EmeraldAIAbility.UseCreateEffect == EmeraldAIAbility.Yes_No.Yes)
                             {
-                                CurrentHealth = StartingHealth;
+                                GameObject G = EmeraldAIObjectPool.SpawnEffect(m_EmeraldAIAbility.CreateEffect,
+                                    RangedAttackTransform.position, RangedAttackTransform.rotation,
+                                    m_EmeraldAIAbility.CastEffectTimeoutSeconds);
+                                G.transform.SetParent(RangedAttackTransform);
                             }
 
-                            if (CombatTextSystem.Instance.m_EmeraldAICombatTextData.CombatTextTargets != EmeraldAICombatTextData.CombatTextTargetEnum.PlayerOnly)
+                            if (CurrentProjectile.GetComponent<EmeraldAIProjectile>() == null)
                             {
-                                CombatTextSystem.Instance.CreateCombatTextAI(m_EmeraldAIAbility.AbilitySupportAmount, HitPointTransform.position, false, true);
+                                CurrentlyCreatedAbility = CurrentProjectile.AddComponent<EmeraldAIProjectile>();
+                            }
+                            else
+                            {
+                                CurrentlyCreatedAbility = CurrentProjectile.GetComponent<EmeraldAIProjectile>();
+                            }
+
+                            if (m_EmeraldAIAbility.UseCreateSound == EmeraldAIAbility.Yes_No.Yes &&
+                                m_EmeraldAIAbility.CreateSoundsList.Count > 0)
+                            {
+                                AudioClip RandomCreateSound =
+                                    m_EmeraldAIAbility.CreateSoundsList[
+                                        Random.Range(0, m_EmeraldAIAbility.CreateSoundsList.Count)];
+                                if (RandomCreateSound != null)
+                                    EmeraldEventsManagerComponent.PlaySoundClip(RandomCreateSound);
+                            }
+
+                            InitializeAbility(CurrentlyCreatedAbility, m_EmeraldAIAbility);
+                            CurrentProjectile.transform.SetParent(ObjectPool.transform);
+                            CurrentProjectile.GetComponent<EmeraldAIProjectile>()
+                                .InitializeProjectile(this,
+                                    m_EmeraldAIAbility); //Initialize the created projectile with the needed data
+                        }
+                        else if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Support &&
+                                 SupportAbilities.Count > 0 && !HealingCooldownActive) //Support
+                        {
+                            GameObject AbilityEffect = EmeraldAIObjectPool.SpawnEffect(m_EmeraldAIAbility.AbilityEffect,
+                                HitPointTransform.position, Quaternion.identity,
+                                m_EmeraldAIAbility.AbilityEffectTimeoutSeconds);
+                            if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Support &&
+                                m_EmeraldAIAbility.SupportType == EmeraldAIAbility.SupportTypeEnum.OverTime)
+                            {
+                                EmeraldEventsManagerComponent.HealOverTimeAbility(m_EmeraldAIAbility);
+                            }
+                            else if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Support &&
+                                     m_EmeraldAIAbility.SupportType == EmeraldAIAbility.SupportTypeEnum.Instant)
+                            {
+                                CurrentHealth += m_EmeraldAIAbility.AbilitySupportAmount;
+
+                                if (CurrentHealth > StartingHealth)
+                                {
+                                    CurrentHealth = StartingHealth;
+                                }
+
+                                if (CombatTextSystem.Instance.m_EmeraldAICombatTextData.CombatTextTargets !=
+                                    EmeraldAICombatTextData.CombatTextTargetEnum.PlayerOnly)
+                                {
+                                    CombatTextSystem.Instance.CreateCombatTextAI(
+                                        m_EmeraldAIAbility.AbilitySupportAmount, HitPointTransform.position, false,
+                                        true);
+                                }
+                            }
+
+                            OnHealEvent.Invoke();
+                            AbilityEffect.transform.SetParent(ObjectPool.transform);
+                            HealingCooldownSeconds = m_EmeraldAIAbility.AbilityCooldown;
+                            HealingCooldownTimer = 0;
+                            HealingCooldownActive = true;
+                            if (m_EmeraldAIAbility.UseCreateSound == EmeraldAIAbility.Yes_No.Yes &&
+                                m_EmeraldAIAbility.CreateSoundsList.Count > 0)
+                            {
+                                AudioClip RandomCreateSound =
+                                    m_EmeraldAIAbility.CreateSoundsList[
+                                        Random.Range(0, m_EmeraldAIAbility.CreateSoundsList.Count)];
+                                if (RandomCreateSound != null)
+                                    EmeraldEventsManagerComponent.PlaySoundClip(RandomCreateSound);
                             }
                         }
-                        OnHealEvent.Invoke();
-                        AbilityEffect.transform.SetParent(ObjectPool.transform);                        
-                        HealingCooldownSeconds = m_EmeraldAIAbility.AbilityCooldown;
-                        HealingCooldownTimer = 0;
-                        HealingCooldownActive = true;
-                        if (m_EmeraldAIAbility.UseCreateSound == EmeraldAIAbility.Yes_No.Yes && m_EmeraldAIAbility.CreateSoundsList.Count > 0)
+                        else if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Summon &&
+                                 SummoningAbilities.Count > 0 && TotalSummonedAI < MaxAllowedSummonedAI) //Summon
                         {
-                            AudioClip RandomCreateSound = m_EmeraldAIAbility.CreateSoundsList[Random.Range(0, m_EmeraldAIAbility.CreateSoundsList.Count)];
-                            if (RandomCreateSound != null)
-                                EmeraldEventsManagerComponent.PlaySoundClip(RandomCreateSound);
+                            TotalSummonedAI++;
+                            Vector3 m_SummonRadius = transform.position + m_EmeraldAIAbility.SummonRadius *
+                                new Vector3(Random.insideUnitSphere.x, 0, Random.insideUnitSphere.z);
+                            GameObject m_SummonedObject = EmeraldAIObjectPool.Spawn(m_EmeraldAIAbility.SummonObject,
+                                m_SummonRadius + Vector3.up, Quaternion.identity);
+                            EmeraldAISystem m_SummonedAI = m_SummonedObject.GetComponent<EmeraldAISystem>();
+                            m_SummonedAI.m_NavMeshAgent.isStopped = true;
+                            if (m_EmeraldAIAbility.UseCreateSound == EmeraldAIAbility.Yes_No.Yes &&
+                                m_EmeraldAIAbility.CreateSoundsList.Count > 0)
+                            {
+                                AudioClip RandomCreateSound =
+                                    m_EmeraldAIAbility.CreateSoundsList[
+                                        Random.Range(0, m_EmeraldAIAbility.CreateSoundsList.Count)];
+                                if (RandomCreateSound != null)
+                                    m_SummonedAI.EmeraldEventsManagerComponent.PlaySoundClip(RandomCreateSound);
+                            }
+
+                            if (m_SummonedObject.GetComponent<SummonedAIComponent>() == null)
+                            {
+                                m_SummonedObject.AddComponent<SummonedAIComponent>()
+                                    .IntitializeSummon(m_EmeraldAIAbility.AbilityLength);
+                            }
+                            else
+                            {
+                                m_SummonedObject.GetComponent<SummonedAIComponent>()
+                                    .IntitializeSummon(m_EmeraldAIAbility.AbilityLength);
+                            }
+
+                            GameObject SummoningEffect = EmeraldAIObjectPool.SpawnEffect(
+                                m_EmeraldAIAbility.SummonEffect, m_SummonedAI.transform.position, Quaternion.identity,
+                                m_EmeraldAIAbility.AbilityEffectTimeoutSeconds);
+                            SummoningEffect.transform.SetParent(m_SummonedObject.transform);
+                            StartCoroutine(InitializeSummonedAI(m_SummonedAI));
                         }
+
+                        m_AbilityPicked = false;
                     }
-                    else if (m_EmeraldAIAbility.AbilityType == EmeraldAIAbility.AbilityTypeEnum.Summon && SummoningAbilities.Count > 0 && TotalSummonedAI < MaxAllowedSummonedAI) //Summon
+                    else
                     {
-                        TotalSummonedAI++;                     
-                        Vector3 m_SummonRadius = transform.position + m_EmeraldAIAbility.SummonRadius * new Vector3(Random.insideUnitSphere.x, 0, Random.insideUnitSphere.z);
-                        GameObject m_SummonedObject = EmeraldAIObjectPool.Spawn(m_EmeraldAIAbility.SummonObject, m_SummonRadius + Vector3.up, Quaternion.identity);                      
-                        EmeraldAISystem m_SummonedAI = m_SummonedObject.GetComponent<EmeraldAISystem>();
-                        m_SummonedAI.m_NavMeshAgent.isStopped = true;
-                        if (m_EmeraldAIAbility.UseCreateSound == EmeraldAIAbility.Yes_No.Yes && m_EmeraldAIAbility.CreateSoundsList.Count > 0)
-                        {
-                            AudioClip RandomCreateSound = m_EmeraldAIAbility.CreateSoundsList[Random.Range(0, m_EmeraldAIAbility.CreateSoundsList.Count)];
-                            if (RandomCreateSound != null)
-                                m_SummonedAI.EmeraldEventsManagerComponent.PlaySoundClip(RandomCreateSound);
-                        }
-
-                        if (m_SummonedObject.GetComponent<SummonedAIComponent>() == null)
-                        {
-                            m_SummonedObject.AddComponent<SummonedAIComponent>().IntitializeSummon(m_EmeraldAIAbility.AbilityLength);
-                        }
-                        else
-                        {
-                            m_SummonedObject.GetComponent<SummonedAIComponent>().IntitializeSummon(m_EmeraldAIAbility.AbilityLength);
-                        }
-
-                        GameObject SummoningEffect = EmeraldAIObjectPool.SpawnEffect(m_EmeraldAIAbility.SummonEffect, m_SummonedAI.transform.position, Quaternion.identity, m_EmeraldAIAbility.AbilityEffectTimeoutSeconds);
-                        SummoningEffect.transform.SetParent(m_SummonedObject.transform);
-                        StartCoroutine(InitializeSummonedAI(m_SummonedAI));
+                        DestinationAdjustedAngle = 100;
+                        AIAnimator.ResetTrigger("Attack");
+                        AIAnimator.SetTrigger("Attack Cancelled");
+                        return;
                     }
-
-                    m_AbilityPicked = false;
                 }
                 else
                 {
@@ -2035,16 +2552,13 @@ namespace EmeraldAI
                     return;
                 }
             }
-            else
+            catch
             {
-                DestinationAdjustedAngle = 100;
-                AIAnimator.ResetTrigger("Attack");
-                AIAnimator.SetTrigger("Attack Cancelled");
-                return;
+                Debug.LogWarning("couldn't create Emererald Projectile", this);
             }
         }
 
-        IEnumerator InitializeSummonedAI (EmeraldAISystem AIObject)
+        IEnumerator InitializeSummonedAI(EmeraldAISystem AIObject)
         {
             yield return new WaitForSeconds(0.1f);
             AIObject.EmeraldEventsManagerComponent.ResetAI();
@@ -2060,15 +2574,15 @@ namespace EmeraldAI
             AIObject.CompanionTargetRef = AIObject.CurrentTarget;
             AIObject.EmeraldBehaviorsComponent.ActivateCombatState();
             AIObject.m_NavMeshAgent.stoppingDistance = AIObject.AttackDistance;
-            yield return new WaitForSeconds(0.8f);           
+            yield return new WaitForSeconds(0.8f);
             AIObject.m_NavMeshAgent.isStopped = false;
         }
 
-        void InitializeAbility (EmeraldAIProjectile CurrentlyCreatedAbility, EmeraldAIAbility m_EmeraldAIAbility)
+        void InitializeAbility(EmeraldAIProjectile CurrentlyCreatedAbility, EmeraldAIAbility m_EmeraldAIAbility)
         {
             CurrentlyCreatedAbility.EmeraldComponent = this;
         }
-       
+
         /// <summary>
         /// This function is used for creating Attack Events for both Ranged and Melee attacks. See the Emerald AI Tutorial - Attack Animation Events video on YouTube.
         /// </summary>
@@ -2093,7 +2607,8 @@ namespace EmeraldAI
 
             if (CurrentTarget != null && m_NavMeshAgent.enabled)
             {
-                if (TargetObstructedActionRef != TargetObstructedAction.StayStationary || WeaponTypeRef == WeaponType.Melee)
+                if (TargetObstructedActionRef != TargetObstructedAction.StayStationary ||
+                    WeaponTypeRef == WeaponType.Melee)
                 {
                     m_NavMeshAgent.destination = CurrentTarget.position;
                 }
@@ -2121,14 +2636,15 @@ namespace EmeraldAI
 
                 if (WeaponTypeRef == WeaponType.Melee)
                 {
-                    CurrentAttackDistance = MeleeAttackDistance;                 
+                    CurrentAttackDistance = MeleeAttackDistance;
                 }
                 else if (WeaponTypeRef == WeaponType.Ranged)
                 {
                     CurrentAttackDistance = RangedAttackDistance;
                 }
 
-                if (WeaponTypeRef == WeaponType.Melee && DistanceCheck <= (CurrentAttackDistance + 0.25f) && !SwitchWeaponTypeTriggered && CurrentTargetHeight <= AttackHeight
+                if (WeaponTypeRef == WeaponType.Melee && DistanceCheck <= (CurrentAttackDistance + 0.25f) &&
+                    !SwitchWeaponTypeTriggered && CurrentTargetHeight <= AttackHeight
                     || WeaponTypeRef == WeaponType.Ranged && !SwitchWeaponTypeTriggered)
                 {
                     float AdjustedAngle = TargetAngle();
@@ -2139,7 +2655,8 @@ namespace EmeraldAI
                         {
                             if (PlayerDamageComponent != null)
                             {
-                                PlayerDamageComponent.SendPlayerDamage(CurrentDamageAmount, this.transform, GetComponent<EmeraldAISystem>(), CriticalHit);
+                                PlayerDamageComponent.SendPlayerDamage(CurrentDamageAmount, this.transform,
+                                    GetComponent<EmeraldAISystem>(), CriticalHit);
                             }
 
                             if (CriticalHit)
@@ -2152,11 +2669,13 @@ namespace EmeraldAI
                                 EmeraldEventsManagerComponent.PlayCriticalHitSound();
                         }
                         else if (TargetTypeRef == TargetType.AI && TargetEmerald != null)
-                        {                          
-                            TargetEmerald.Damage(CurrentDamageAmount, TargetType.AI, this.transform, SentRagdollForceAmount, CriticalHit);
+                        {
+                            TargetEmerald.Damage(CurrentDamageAmount, TargetType.AI, this.transform,
+                                SentRagdollForceAmount, CriticalHit);
                             OnDoDamageEvent.Invoke();
 
-                            if (!IsBlocking || TargetEmerald.TransformAngle(TargetEmerald.LastAttacker) > TargetEmerald.MaxBlockAngle)
+                            if (!IsBlocking || TargetEmerald.TransformAngle(TargetEmerald.LastAttacker) >
+                                TargetEmerald.MaxBlockAngle)
                             {
                                 if (CriticalHit)
                                     OnCriticalHitEvent.Invoke();
@@ -2187,7 +2706,7 @@ namespace EmeraldAI
                             if (!CriticalHit || CriticalHitSounds.Count == 0)
                                 EmeraldEventsManagerComponent.PlayImpactSound();
                             else if (CriticalHit && CriticalHitSounds.Count > 0)
-                                EmeraldEventsManagerComponent.PlayCriticalHitSound();                          
+                                EmeraldEventsManagerComponent.PlayCriticalHitSound();
                         }
 
                         if (WeaponTypeRef == WeaponType.Melee)
@@ -2196,21 +2715,30 @@ namespace EmeraldAI
                             {
                                 if (TargetTypeRef == TargetType.Player)
                                 {
-                                    GameObject ImpactEffect = EmeraldAIObjectPool.SpawnEffect(MeleeAttacks[MeleeAttackIndex].AttackImpactEffect, CurrentTarget.position + (CurrentTarget.up * CurrentPositionModifier), Quaternion.identity, 2);
+                                    GameObject ImpactEffect = EmeraldAIObjectPool.SpawnEffect(
+                                        MeleeAttacks[MeleeAttackIndex].AttackImpactEffect,
+                                        CurrentTarget.position + (CurrentTarget.up * CurrentPositionModifier),
+                                        Quaternion.identity, 2);
                                     ImpactEffect.transform.SetParent(CurrentTarget.transform);
                                 }
-                                else if (TargetTypeRef == TargetType.AI && TargetEmerald != null && !TargetEmerald.IsDead)
+                                else if (TargetTypeRef == TargetType.AI && TargetEmerald != null &&
+                                         !TargetEmerald.IsDead)
                                 {
-                                    GameObject ImpactEffect = EmeraldAIObjectPool.SpawnEffect(MeleeAttacks[MeleeAttackIndex].AttackImpactEffect, TargetEmerald.HitPointTransform.position, Quaternion.identity, 2);
+                                    GameObject ImpactEffect = EmeraldAIObjectPool.SpawnEffect(
+                                        MeleeAttacks[MeleeAttackIndex].AttackImpactEffect,
+                                        TargetEmerald.HitPointTransform.position, Quaternion.identity, 2);
                                     ImpactEffect.transform.SetParent(CurrentTarget.transform);
                                 }
                                 else if (TargetTypeRef == TargetType.NonAITarget)
                                 {
-                                    GameObject ImpactEffect = EmeraldAIObjectPool.SpawnEffect(MeleeAttacks[MeleeAttackIndex].AttackImpactEffect, CurrentTarget.position + (CurrentTarget.up * CurrentPositionModifier), CurrentTarget.rotation, 2);
+                                    GameObject ImpactEffect = EmeraldAIObjectPool.SpawnEffect(
+                                        MeleeAttacks[MeleeAttackIndex].AttackImpactEffect,
+                                        CurrentTarget.position + (CurrentTarget.up * CurrentPositionModifier),
+                                        CurrentTarget.rotation, 2);
                                     ImpactEffect.transform.SetParent(CurrentTarget.transform);
                                 }
                             }
-                        }   
+                        }
                     }
                 }
             }
@@ -2231,10 +2759,11 @@ namespace EmeraldAI
         /// <param name="TypeOfTarget">The type of target who is causing the damage.</param>
         /// <param name="AttackerTransform">The transform of the current attacker.</param>
         /// <param name="RagdollForce">The amount of force to apply to this AI when they die. (Use Ragdoll must be enabled on this AI)</param>
-        public void Damage (int DamageAmount, TargetType? TypeOfTarget = null, Transform AttackerTransform = null, int RagdollForce = 100, bool CriticalHit = false)
+        public void Damage(int DamageAmount, TargetType? TypeOfTarget = null, Transform AttackerTransform = null,
+            int RagdollForce = 100, bool CriticalHit = false)
         {
             LastAttacker = AttackerTransform;
-            
+
             if (CombatStateRef == CombatState.Active && AttackerTransform != CurrentTarget)
             {
                 if (UseAggro == YesOrNo.Yes)
@@ -2247,7 +2776,8 @@ namespace EmeraldAI
 
                     if (CurrentAggroHits >= TotalAggroHits && !IsAttacking && !IsBackingUp)
                     {
-                        if (IsBlocking && UseBlockingRef == YesOrNo.Yes || IsMoving || IsIdling && UseBlockingRef == YesOrNo.No)
+                        if (IsBlocking && UseBlockingRef == YesOrNo.Yes || IsMoving ||
+                            IsIdling && UseBlockingRef == YesOrNo.No)
                         {
                             if (AggroActionRef == AggroAction.LastAttacker && AttackerTransform != CurrentTarget)
                             {
@@ -2277,27 +2807,31 @@ namespace EmeraldAI
             }
 
             //If our AI is hit and does not have a target, expand its detection to look for the damage source.
-            if (CurrentTarget == null && CombatStateRef == CombatState.NotActive || DeathDelayActive || BehaviorRef == CurrentBehavior.Cautious && CurrentTarget != null && ConfidenceRef != ConfidenceType.Coward)
+            if (CurrentTarget == null && CombatStateRef == CombatState.NotActive || DeathDelayActive ||
+                BehaviorRef == CurrentBehavior.Cautious && CurrentTarget != null &&
+                ConfidenceRef != ConfidenceType.Coward)
             {
                 //Return, if our attacker is equal to the AI's follow target.
                 if (CurrentFollowTarget != null && AttackerTransform == CurrentFollowTarget)
                 {
                     if (BehaviorRef == CurrentBehavior.Companion || BehaviorRef == CurrentBehavior.Pet)
-                        return;               
+                        return;
                 }
 
                 if (BehaviorRef == CurrentBehavior.Aggressive ||
                     BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef != ConfidenceType.Coward ||
                     BehaviorRef == CurrentBehavior.Passive && ConfidenceRef != ConfidenceType.Coward)
                 {
-                    if (AttackerTransform) 
+                    if (AttackerTransform)
                     {
                         if (TypeOfTarget != null)
-                        {                           
-                            TargetTypeRef = (TargetType)TypeOfTarget;
+                        {
+                            TargetTypeRef = (TargetType) TypeOfTarget;
                         }
 
-                        if (TargetTypeRef == TargetType.AI || TargetTypeRef == TargetType.Player && PlayerFaction[0].RelationTypeRef != PlayerFactionClass.RelationType.Friendly || TargetTypeRef == TargetType.NonAITarget)
+                        if (TargetTypeRef == TargetType.AI ||
+                            TargetTypeRef == TargetType.Player && PlayerFaction[0].RelationTypeRef !=
+                            PlayerFactionClass.RelationType.Friendly || TargetTypeRef == TargetType.NonAITarget)
                         {
                             DeathDelayActive = false;
                             CurrentTarget = AttackerTransform;
@@ -2312,11 +2846,14 @@ namespace EmeraldAI
                                 }
                             }
 
-                            if (EnableDebugging == EmeraldAISystem.YesOrNo.Yes && DebugLogTargetsEnabled == EmeraldAISystem.YesOrNo.Yes && !DeathDelayActive)
+                            if (EnableDebugging == EmeraldAISystem.YesOrNo.Yes &&
+                                DebugLogTargetsEnabled == EmeraldAISystem.YesOrNo.Yes && !DeathDelayActive)
                             {
                                 if (CurrentTarget != null)
                                 {
-                                    Debug.Log("<b>" + "<color=green>" + gameObject.name + "'s Current Target: " + "</color>" + "<color=red>" + CurrentTarget.gameObject.name + "</color>" + "</b>");
+                                    Debug.Log("<b>" + "<color=green>" + gameObject.name + "'s Current Target: " +
+                                              "</color>" + "<color=red>" + CurrentTarget.gameObject.name + "</color>" +
+                                              "</b>");
                                 }
                             }
 
@@ -2342,12 +2879,14 @@ namespace EmeraldAI
                         EmeraldDetectionComponent.SearchForTarget();
                     }
                 }
-                else if (BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef == ConfidenceType.Coward || BehaviorRef == CurrentBehavior.Passive && ConfidenceRef == ConfidenceType.Coward)
+                else if (BehaviorRef == CurrentBehavior.Cautious && ConfidenceRef == ConfidenceType.Coward ||
+                         BehaviorRef == CurrentBehavior.Passive && ConfidenceRef == ConfidenceType.Coward)
                 {
                     if (AttackerTransform.CompareTag(PlayerTag))
                     {
                         PlayerFaction[0].RelationTypeRef = PlayerFactionClass.RelationType.Enemy;
                     }
+
                     BehaviorRef = CurrentBehavior.Cautious;
                     MaxChaseDistance = ExpandedChaseDistance;
                     DetectionRadius = ExpandedDetectionRadius;
@@ -2368,18 +2907,22 @@ namespace EmeraldAI
             }
 
             //Don't allow a Companion to receive damage from its own follower
-            if (AttackerTransform != CurrentFollowTarget && BehaviorRef == CurrentBehavior.Companion && !IsDead || BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet && !IsDead)
+            if (AttackerTransform != CurrentFollowTarget && BehaviorRef == CurrentBehavior.Companion && !IsDead ||
+                BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet && !IsDead)
             {
                 if (!IsBlocking || AdjustedBlockAngle > MaxBlockAngle)
                 {
                     CurrentHealth -= DamageAmount;
                     if (TypeOfTarget != TargetType.Player)
                     {
-                        if (CombatTextSystem.Instance.m_EmeraldAICombatTextData.CombatTextTargets != EmeraldAICombatTextData.CombatTextTargetEnum.PlayerOnly && !IsDead)
+                        if (CombatTextSystem.Instance.m_EmeraldAICombatTextData.CombatTextTargets !=
+                            EmeraldAICombatTextData.CombatTextTargetEnum.PlayerOnly && !IsDead)
                         {
-                            CombatTextSystem.Instance.CreateCombatTextAI(DamageReceived, HitPointTransform.position, CriticalHit, false);
+                            CombatTextSystem.Instance.CreateCombatTextAI(DamageReceived, HitPointTransform.position,
+                                CriticalHit, false);
                         }
                     }
+
                     DamageEvent.Invoke(); //Invoke our AI's Damage Event
 
                     if (UseHitEffect == YesOrNo.Yes && !DamageEffectInhibitor && BloodEffectsList.Count > 0 && !IsDead)
@@ -2387,7 +2930,8 @@ namespace EmeraldAI
                         GameObject RandomBloodEffect = BloodEffectsList[Random.Range(0, BloodEffectsList.Count)];
                         if (RandomBloodEffect != null)
                         {
-                            GameObject SpawnedBlood = EmeraldAIObjectPool.SpawnEffect(RandomBloodEffect, Vector3.zero, transform.rotation, BloodEffectTimeoutSeconds) as GameObject;
+                            GameObject SpawnedBlood = EmeraldAIObjectPool.SpawnEffect(RandomBloodEffect, Vector3.zero,
+                                transform.rotation, BloodEffectTimeoutSeconds) as GameObject;
                             SpawnedBlood.transform.SetParent(transform);
 
                             if (LBDImpactPosition == Vector3.zero)
@@ -2425,22 +2969,23 @@ namespace EmeraldAI
                         }
                     }
 
-                    if (UseHitAnimations == YesOrNo.Yes && !IsGettingHit && !IsMoving && !IsBackingUp && !IsAttacking 
-                        && !IsTurning && !IsEquipping && AdjustedBlockAngle <= MaxBlockAngle) 
+                    if (UseHitAnimations == YesOrNo.Yes && !IsGettingHit && !IsMoving && !IsBackingUp && !IsAttacking
+                        && !IsTurning && !IsEquipping && AdjustedBlockAngle <= MaxBlockAngle)
                     {
                         AIAnimator.SetTrigger("Hit");
                         EmeraldEventsManagerComponent.Invoke("CancelAttackAnimation", 0.25f);
                     }
-                    else 
+                    else
                         AIAnimator.ResetTrigger("Hit");
                 }
                 else if (IsBlocking && AdjustedBlockAngle <= MaxBlockAngle)
                 {
                     float BlockDamage = Mathf.Abs((DamageAmount * ((MitigationAmount - 1) * 0.01f)) - DamageAmount);
-                    CurrentHealth -= (int)BlockDamage;
+                    CurrentHealth -= (int) BlockDamage;
                     if (TypeOfTarget != TargetType.Player)
                     {
-                        CombatTextSystem.Instance.CreateCombatTextAI((int)BlockDamage, HitPointTransform.position, CriticalHit, false);
+                        CombatTextSystem.Instance.CreateCombatTextAI((int) BlockDamage, HitPointTransform.position,
+                            CriticalHit, false);
                     }
 
                     EmeraldEventsManagerComponent.PlayBlockSound();
@@ -2452,7 +2997,7 @@ namespace EmeraldAI
             //Make our Brave AI flee if its health reaches the proper amount
             if (BehaviorRef == CurrentBehavior.Aggressive && ConfidenceRef == ConfidenceType.Brave)
             {
-                if (((float)CurrentHealth / (float)StartingHealth) <= ((float)HealthPercentageToFlee * 0.01f))
+                if (((float) CurrentHealth / (float) StartingHealth) <= ((float) HealthPercentageToFlee * 0.01f))
                 {
                     m_NavMeshAgent.updateRotation = true;
                     m_NavMeshAgent.ResetPath();
@@ -2478,7 +3023,8 @@ namespace EmeraldAI
         public void Deactivate()
         {
             if (CurrentTarget == null && !ReturningToStartInProgress &&
-                BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet && CurrentDetectionRef == CurrentDetection.Unaware)
+                BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet &&
+                CurrentDetectionRef == CurrentDetection.Unaware)
             {
                 TargetDetectionActive = false;
                 AIBoxCollider.enabled = false;
@@ -2486,7 +3032,8 @@ namespace EmeraldAI
                 OptimizedStateRef = OptimizedState.Active;
                 DeactivateTimer = 0;
 
-                if (HealthBarCanvas != null && BehaviorRef != CurrentBehavior.Companion && BehaviorRef != CurrentBehavior.Pet)
+                if (HealthBarCanvas != null && BehaviorRef != CurrentBehavior.Companion &&
+                    BehaviorRef != CurrentBehavior.Pet)
                 {
                     SetUI(false);
                 }
@@ -2516,11 +3063,13 @@ namespace EmeraldAI
             {
                 if (CurrentMeleeAttackType == CurrentMeleeAttackTypes.StationaryAttack)
                 {
-                    CurrentDamageAmount = Random.Range(MeleeAttacks[MeleeAttacksListIndex].MinDamage, MeleeAttacks[MeleeAttacksListIndex].MaxDamage);
+                    CurrentDamageAmount = Random.Range(MeleeAttacks[MeleeAttacksListIndex].MinDamage,
+                        MeleeAttacks[MeleeAttacksListIndex].MaxDamage);
                 }
                 else if (CurrentMeleeAttackType == CurrentMeleeAttackTypes.RunAttack)
                 {
-                    CurrentDamageAmount = Random.Range(MeleeRunAttacks[MeleeRunAttacksListIndex].MinDamage, MeleeRunAttacks[MeleeRunAttacksListIndex].MaxDamage);
+                    CurrentDamageAmount = Random.Range(MeleeRunAttacks[MeleeRunAttacksListIndex].MinDamage,
+                        MeleeRunAttacks[MeleeRunAttacksListIndex].MaxDamage);
                 }
             }
             else if (RandomizeDamageRef == YesOrNo.No)
@@ -2587,14 +3136,15 @@ namespace EmeraldAI
         /// <summary>
         /// Returns the current angle from the AI's target.
         /// </summary>
-        public float TargetAngle ()
+        public float TargetAngle()
         {
             if (CurrentTarget == null)
             {
                 return 360;
             }
 
-            Vector3 Direction = new Vector3(CurrentTarget.position.x, 0, CurrentTarget.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 Direction = new Vector3(CurrentTarget.position.x, 0, CurrentTarget.position.z) -
+                                new Vector3(transform.position.x, 0, transform.position.z);
             float angle = Vector3.Angle(transform.forward, Direction);
             float RotationDifference = transform.localEulerAngles.x;
             RotationDifference = (RotationDifference > 180) ? RotationDifference - 360 : RotationDifference;
@@ -2618,9 +3168,10 @@ namespace EmeraldAI
         /// <summary>
         /// Returns the current angle from the AI's destination.
         /// </summary>
-        public float DestinationAngle ()
+        public float DestinationAngle()
         {
-            Vector3 Direction = new Vector3(m_NavMeshAgent.steeringTarget.x, 0, m_NavMeshAgent.steeringTarget.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 Direction = new Vector3(m_NavMeshAgent.steeringTarget.x, 0, m_NavMeshAgent.steeringTarget.z) -
+                                new Vector3(transform.position.x, 0, transform.position.z);
             float angle = Vector3.Angle(transform.forward, Direction);
             float RotationDifference = transform.localEulerAngles.x;
             RotationDifference = (RotationDifference > 180) ? RotationDifference - 360 : RotationDifference;
@@ -2636,7 +3187,8 @@ namespace EmeraldAI
             if (Target == null)
                 return 180;
 
-            Vector3 Direction = new Vector3(Target.position.x, 0, Target.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 Direction = new Vector3(Target.position.x, 0, Target.position.z) -
+                                new Vector3(transform.position.x, 0, transform.position.z);
             float angle = Vector3.Angle(transform.forward, Direction);
             float RotationDifference = transform.localEulerAngles.x;
             RotationDifference = (RotationDifference > 180) ? RotationDifference - 360 : RotationDifference;
@@ -2652,7 +3204,8 @@ namespace EmeraldAI
             if (LookAtTarget == null)
                 return 180;
 
-            Vector3 Direction = new Vector3(LookAtTarget.position.x, 0, LookAtTarget.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Vector3 Direction = new Vector3(LookAtTarget.position.x, 0, LookAtTarget.position.z) -
+                                new Vector3(transform.position.x, 0, transform.position.z);
             float angle = Vector3.Angle(transform.forward, Direction);
             float RotationDifference = transform.localEulerAngles.x;
             RotationDifference = (RotationDifference > 180) ? RotationDifference - 360 : RotationDifference;
@@ -2661,4 +3214,3 @@ namespace EmeraldAI
         }
     }
 }
- 

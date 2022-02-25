@@ -41,4 +41,30 @@ public class RuneRandomSpawner : MonoBehaviour
             vRuneSpawn.gameObject.SetActive(false);
         }
     }
+
+    public void RespawnRunes()
+    {
+        var spawners = GetComponentsInChildren<RuneSpawn>();
+        foreach (var runeSpawn in spawners)
+        {
+            _runeSpawns.Add(runeSpawn);
+        }
+
+        for (var ctr = 0; ctr < numberOfRunesToSpawn; ++ctr)
+        {
+            var spawnIndex = _randomSpawner.Next(_runeSpawns.Count);
+            var runeIndex = _randomRune.Next(runeGo.Length);
+
+            var parentTransform = _runeSpawns[spawnIndex].transform;
+            var rune = Instantiate(runeGo[runeIndex], parentTransform.position, parentTransform.rotation);
+
+            rune.transform.SetParent(parentTransform);
+            _runeSpawns.Remove(_runeSpawns[spawnIndex]);
+        }
+
+        foreach (var vRuneSpawn in _runeSpawns)
+        {
+            vRuneSpawn.gameObject.SetActive(false);
+        }
+    }
 }

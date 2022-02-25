@@ -16,11 +16,16 @@ public class RuneCounter : MonoBehaviour
 
     private void Start()
     {
-        _objective.GetRuneShrines(FindObjectsOfType<RuneStoneTrigger>());
+        _objective.GetRuneShrines(FindObjectsOfType<RuneStone>());
     }
 
     private void FixedUpdate()
     {
         _textMeshPro.text = _objective.RemainingShrines().ToString();
+    }
+
+    public void GetRuneSpawns()
+    {
+        _objective.GetRuneShrines(FindObjectsOfType<RuneStone>());
     }
 }

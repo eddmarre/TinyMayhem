@@ -24,8 +24,9 @@ public class Objective : ScriptableObject
         return _numberOfShrines - _numberOfShrinesActivated;
     }
 
-    public void GetRuneShrines(RuneStoneTrigger[] runeStoneTriggers)
+    public void GetRuneShrines(RuneStone[] runes)
     {
-        _numberOfShrines = runeStoneTriggers.Length;
+        _numberOfShrines = runes.Length;
+        _numberOfShrinesActivated = 0;
     }
 }
