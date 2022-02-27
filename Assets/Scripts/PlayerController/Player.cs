@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using EmeraldAI;
 using EmeraldAI.Example;
+using TinyMayhem.GamePlay;
 
-namespace PlayerController
+namespace TinyMayhem.Player
 {
     public class Player : MonoBehaviour
     {

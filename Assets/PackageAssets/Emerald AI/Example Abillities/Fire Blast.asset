@@ -15,7 +15,7 @@ MonoBehaviour:
   AbilityName: Fire Blast
   AbilityDescription: Launches a ball of fire towards a target dealing 10 pts of
     damage.
-  AbilityDamage: 10
+  AbilityDamage: 34
   MinAbilityDamage: 5
   MaxAbilityDamage: 10
   AbilityDamagePerIncrement: 5

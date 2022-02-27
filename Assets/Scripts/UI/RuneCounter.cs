@@ -1,31 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TinyMayhem.Scriptable;
 using TMPro;
 using UnityEngine;
 
-public class RuneCounter : MonoBehaviour
+namespace TinyMayhem.UI
 {
-    [SerializeField] private Objective _objective;
-    private TextMeshProUGUI _textMeshPro;
-
-    private void Awake()
+    public class RuneCounter : MonoBehaviour
     {
-        _textMeshPro = GetComponent<TextMeshProUGUI>();
-    }
+        [SerializeField] private Objective _objective;
+        private TextMeshProUGUI _textMeshPro;
 
-    private void Start()
-    {
-        _objective.GetRuneShrines(FindObjectsOfType<RuneStone>());
-    }
+        private void Awake()
+        {
+            _textMeshPro = GetComponent<TextMeshProUGUI>();
+        }
 
-    private void FixedUpdate()
-    {
-        _textMeshPro.text = _objective.RemainingShrines().ToString();
-    }
+        private void Start()
+        {
+            _objective.GetRuneShrines(FindObjectsOfType<RuneStone>());
+        }
 
-    public void GetRuneSpawns()
-    {
-        _objective.GetRuneShrines(FindObjectsOfType<RuneStone>());
+        private void FixedUpdate()
+        {
+            _textMeshPro.text = _objective.RemainingShrines().ToString();
+        }
+
+        public void GetRuneSpawns()
+        {
+            _objective.GetRuneShrines(FindObjectsOfType<RuneStone>());
+        }
     }
 }
